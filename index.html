@@ -102,11 +102,7 @@
           $cell.dataset.number = cellNumber;
           $cell.addEventListener("click", () => onClick($cell));
 
-          preCells.splice(
-            Math.floor(Math.random() * preCells.length) + 0,
-            0,
-            $cell
-          );
+          preCells.splice(Math.floor(Math.random() * cellNumber), 0, $cell);
         }
 
         $cellGrid.append(...preCells);
