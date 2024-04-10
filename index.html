@@ -76,17 +76,40 @@
         color: white;
         font-size: 10vmin;
       }
+
+      .controls {
+        display: flex;
+        flex-direction: row;
+
+        font-size: 10vmin;
+        line-height: 1.5em;
+      }
+
+      .controls > button {
+        font-size: inherit;
+        background: none;
+        border: none;
+        cursor: pointer;
+      }
     </style>
   </head>
   <body class="roboto-regular">
     <!-- <button>start</button> -->
     <div class="cell-grid"></div>
 
-    <div class="timer">00:00</div>
+    <div class="controls">
+      <span>⏱️</span>
+      <div class="timer">00:00</div>
+      <button class="reset">🔄</button>
+    </div>
+
     <script>
       const cellCount = 25;
       $cellGrid = document.querySelector(".cell-grid");
       $timer = document.querySelector(".timer");
+      $resetBtn = document.querySelector(".reset");
+
+      $resetBtn.addEventListener("click", initGrid);
 
       const $root = document.querySelector(":root");
       $root.style.setProperty("--cellCount", cellCount);
@@ -132,7 +155,8 @@
         const timeStart = new Date().getTime();
 
         clearInterval(interval);
-        interval = setInterval(() => {
+        timerInterval();
+        function timerInterval() {
           const timeNow = new Date().getTime();
           const diff = timeNow - timeStart;
 
@@ -143,7 +167,9 @@
           });
 
           $timer.textContent = timeStr;
-        }, 1000);
+        }
+
+        interval = setInterval(timerInterval, 1000);
       }
 
       //
