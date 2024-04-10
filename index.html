@@ -92,6 +92,7 @@
           currentNum++;
         }
 
+        const preCells = [];
         for (let cellNumber = 1; cellNumber <= cellCount; cellNumber++) {
           //
 
@@ -101,8 +102,14 @@
           $cell.dataset.number = cellNumber;
           $cell.addEventListener("click", () => onClick($cell));
 
-          $cellGrid.appendChild($cell);
+          preCells.splice(
+            Math.floor(Math.random() * preCells.length) + 0,
+            0,
+            $cell
+          );
         }
+
+        $cellGrid.append(...preCells);
       }
 
       //
