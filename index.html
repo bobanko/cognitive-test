@@ -4,53 +4,109 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cognitive Test</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      .wrapper {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        grid-column-gap: 0px;
-        grid-row-gap: 0px;
+      .roboto-regular {
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        font-style: normal;
       }
 
-      .wrapper > div {
-        width: 20vw;
-        height: 20vh;
+      .roboto-bold {
+        font-family: "Roboto", sans-serif;
+        font-weight: 700;
+        font-style: normal;
+      }
+
+      body {
+        /* reset */
+        margin: 0;
 
         display: flex;
         align-items: center;
         justify-content: center;
+        height: 100vh;
+        width: 100vw;
+      }
 
-        font-size: 5rem;
+      .cell-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
+
+        width: 100vmin;
+        height: 100vmin;
+
+        border: 1px solid black;
+      }
+
+      .cell {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 10vmin;
+
+        border: 1px solid black;
+
+        cursor: pointer;
+
+        content: attr(data-number);
+      }
+      .cell:after {
+        content: attr(data-number);
+      }
+
+      .cell.checked {
+        color: gray;
+        background-color: gainsboro;
       }
     </style>
   </head>
-  <body>
-    <div class="wrapper">
-      <div>1</div>
-      <div>2</div>
-      <div>3</div>
-      <div>4</div>
-      <div>5</div>
-      <div>6</div>
-      <div>7</div>
-      <div>8</div>
-      <div>9</div>
-      <div>10</div>
-      <div>11</div>
-      <div>12</div>
-      <div>13</div>
-      <div>14</div>
-      <div>15</div>
-      <div>16</div>
-      <div>17</div>
-      <div>18</div>
-      <div>19</div>
-      <div>20</div>
-      <div>21</div>
-      <div>22</div>
-      <div>23</div>
-      <div>24</div>
-      <div>25</div>
-    </div>
+  <body class="roboto-regular">
+    <!-- <button>start</button> -->
+    <div class="cell-grid"></div>
+
+    <script>
+      const cellCount = 25;
+      $cellGrid = document.querySelector(".cell-grid");
+
+      function initGrid() {
+        //remove all
+        $cellGrid.replaceChildren();
+
+        let currentNum = 1;
+
+        function onClick($cell) {
+          if ($cell.classList.contains("checked")) return;
+
+          if (+$cell.dataset.number !== currentNum) return;
+
+          $cell.classList.add("checked");
+          currentNum++;
+        }
+
+        for (let cellNumber = 1; cellNumber <= cellCount; cellNumber++) {
+          //
+
+          const $cell = document.createElement("div");
+          $cell.classList.add("cell");
+
+          $cell.dataset.number = cellNumber;
+          $cell.addEventListener("click", () => onClick($cell));
+
+          $cellGrid.appendChild($cell);
+        }
+      }
+
+      //
+      initGrid();
+    </script>
   </body>
 </html>
