@@ -1,15 +1,9 @@
 import { Timer } from "./timer.js";
-import { avatars } from "./avatars.js";
+import { getAvatarForUid } from "./avatars.js";
 import { getUser, loadLeaderboards, saveHiScores } from "./firebase.js";
-import { getHashNum } from "./helpers.js";
 
-function getAvatarForUid(uid) {
-  const avatarId = getHashNum(uid, avatars.length);
-  return avatars[avatarId];
-}
+import { cellCount } from "./config.js";
 
-const cellCount = 25;
-// const cellCount = 4;
 // todo(vmyshko): use $ids directly
 const $cellGrid = document.querySelector(".cell-grid");
 const $timer = document.querySelector(".timer");
@@ -102,7 +96,7 @@ function initGrid() {
 
       $score.textContent = "⏱️" + formatScore(currentScore);
 
-      saveHiScores({
+      await saveHiScores({
         uid: user.uid,
         score: currentScore,
         date: new Date(),
@@ -119,9 +113,11 @@ function initGrid() {
       let rank = 0;
       let currentRank = 0;
       leaders.forEach((doc) => {
-        const userData = doc.data();
+        const userData = {
+          uid: doc.id,
+          ...doc.data(),
+        };
         rank++;
-        console.log(doc.id, userData);
 
         const isCurrent =
           userData.uid === user.uid && userData.score === currentScore;
@@ -151,7 +147,7 @@ function initGrid() {
     $cell.classList.add("cell");
 
     $cell.dataset.number = cellNumber;
-    $cell.addEventListener("click", () => onClick($cell));
+    $cell.addEventListener("mousedown", () => onClick($cell));
 
     preCells.splice(Math.floor(Math.random() * cellNumber), 0, $cell);
   }

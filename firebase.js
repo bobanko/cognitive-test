@@ -7,7 +7,10 @@ import {
   limit,
   collection,
   getDocs,
+  getDoc,
   addDoc,
+  doc,
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 import {
   getAuth,
@@ -16,52 +19,65 @@ import {
   //   EmailAuthProvider,
   //   linkWithCredential,
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyCvdAyCXjT8-rxTgx-_Hza6qivdwzrjW3s",
-  authDomain: "cognitive-test-83d3f.firebaseapp.com",
-  projectId: "cognitive-test-83d3f",
-  storageBucket: "cognitive-test-83d3f.appspot.com",
-  messagingSenderId: "84067554932",
-  appId: "1:84067554932:web:5404e84daa589863866321",
-  measurementId: "G-LM7L0F5E3N",
-};
+import { firebaseConfig, hiScoresTableName } from "./config.js";
+import { getAvatarForUid } from "./avatars.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// todo(vmyshko): switch between modes?
-// const leaderboardsTableName = "leaderboards";
-const leaderboardsTableName = "leaderboards-5x5";
-
 export async function loadLeaderboards() {
-  //read list
-
-  const leaderboardsRef = collection(db, leaderboardsTableName);
+  const hiScoresRef = collection(db, hiScoresTableName);
 
   const querySnapshot = getDocs(
-    query(leaderboardsRef, orderBy("score"), limit(50))
+    query(
+      hiScoresRef,
+      orderBy("score")
+      //, limit(50)
+    )
   );
 
   return querySnapshot;
 }
 
-export async function saveHiScores({ uid, score, date }) {
-  //write
-  try {
-    const docRef = await addDoc(collection(db, leaderboardsTableName), {
-      uid,
+export async function savePlayerHiScore({ uid, score, date }) {
+  const hiScoreRef = doc(db, hiScoresTableName, uid);
+  const hiScoreSnap = await getDoc(hiScoreRef);
+
+  const av = getAvatarForUid(uid);
+
+  if (!hiScoreSnap.exists()) {
+    console.log(`${av}[CREATE] score for this player not exists -- create`);
+    return setDoc(hiScoreRef, {
       score,
       date,
     });
-
-    console.log("Document written with ID: ", docRef.id);
-  } catch (e) {
-    console.error("Error adding document: ", e);
   }
+
+  //hi score exists
+  const hiScoreData = hiScoreSnap.data();
+
+  if (hiScoreData.score <= score) {
+    console.log(
+      `${av}[SKIP] old score: ${hiScoreData.score} is better (<) than ${score}`
+    );
+    return;
+  }
+
+  //do update
+
+  console.log(
+    `${av}[UPDATE] old score: ${hiScoreData.score} is worse (>) than ${score}`
+  );
+  return setDoc(hiScoreRef, {
+    score,
+    date,
+  });
+}
+
+export async function saveHiScores({ uid, score, date }) {
+  // test
+  return savePlayerHiScore({ uid, score, date });
 }
 
 export async function getUser() {
@@ -86,22 +102,3 @@ export async function getUser() {
 
 // todo(vmyshko): convert anon to registered
 // https://firebase.google.com/docs/auth/web/anonymous-auth#web-modular-api_3
-
-// const email = "test@test.com";
-// const password = "qwerty";
-
-// const credential = GoogleAuthProvider.credential(
-//     googleUser.getAuthResponse().id_token);
-
-// const credential = EmailAuthProvider.credential(email, password);
-
-// console.log(credential);
-
-// linkWithCredential(auth.currentUser, credential)
-//   .then((usercred) => {
-//     const user = usercred.user;
-//     console.log("Anonymous account successfully upgraded", user);
-//   })
-//   .catch((error) => {
-//     console.log("Error upgrading anonymous account", error);
-//   });
