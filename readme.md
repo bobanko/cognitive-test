@@ -1,22 +1,24 @@
 # todo:
 
-## ui:  
+## ui:
 
-[ ] remove gray effect for selected (for difficult mode?)   
+[ ] remove gray effect for selected (for difficult mode?)  
 [ ] make green/red effect for right/wrong?  
 [ ] fix landscape mode / for desktops  
 [ ] open leaderboards from game / at the beginning  
 [ ] show last/best scores  
-[~] scroll to current result in table  
+[x] scroll to current result in table
+[ ] scroll to current result in table when clicking on av
+[ ] choose by mousedown, not click to avoid misclicks
 
-## leaderboard:  
+## leaderboard:
 
-[ ] input user name / age  
-[x] store it in cookies  
-[x] show leaderboard in the end?  
+[ ] keep only best result per player  
+[ ] input user name / age
 
-## other improvements:  
+## other improvements:
+
 [ ] choose difficulty level 3x3, 4x4, 5x5 etc.  
 [ ] make auth with email/pw + google etc.  
 [ ] add 5m timeout to loose  
-[ ]  
+[ ]
