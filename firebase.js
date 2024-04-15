@@ -33,10 +33,14 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// todo(vmyshko): switch between modes?
+// const leaderboardsTableName = "leaderboards";
+const leaderboardsTableName = "leaderboards-5x5";
+
 export async function loadLeaderboards() {
   //read list
 
-  const leaderboardsRef = collection(db, "leaderboards");
+  const leaderboardsRef = collection(db, leaderboardsTableName);
 
   const querySnapshot = getDocs(
     query(leaderboardsRef, orderBy("score"), limit(50))
@@ -48,7 +52,7 @@ export async function loadLeaderboards() {
 export async function saveHiScores({ uid, score, date }) {
   //write
   try {
-    const docRef = await addDoc(collection(db, "leaderboards"), {
+    const docRef = await addDoc(collection(db, leaderboardsTableName), {
       uid,
       score,
       date,
