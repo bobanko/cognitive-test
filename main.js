@@ -117,16 +117,23 @@ function initGrid() {
       $leaderboardsTableBody.replaceChildren();
 
       let rank = 0;
+      let currentRank = 0;
       leaders.forEach((doc) => {
         const userData = doc.data();
-
+        rank++;
         console.log(doc.id, userData);
 
         const isCurrent =
           userData.uid === user.uid && userData.score === currentScore;
-        rank++;
+        if (isCurrent) {
+          currentRank = rank;
+        }
+
         addLeaderboardsRow({ ...userData, rank, isCurrent });
       });
+
+      const rowHeight = 129; // todo(vmyshko): calc?
+      $leaderboardsContainer.scrollTo(0, rowHeight * (currentRank - 2));
     }
   }
 
