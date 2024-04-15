@@ -132,8 +132,14 @@ function initGrid() {
         addLeaderboardsRow({ ...userData, rank, isCurrent });
       });
 
-      const rowHeight = 129; // todo(vmyshko): calc?
-      $leaderboardsContainer.scrollTo(0, rowHeight * (currentRank - 2));
+      const rowHeight =
+        $leaderboardsContainer.querySelector("tbody>tr").clientHeight;
+
+      $leaderboardsContainer.scrollTo({
+        top: rowHeight * (currentRank - 2),
+        left: 0,
+        behavior: "smooth",
+      });
     }
   }
 
