@@ -3,21 +3,30 @@ import { avatars } from "./avatars.js";
 import { getUser, loadLeaderboards, saveHiScores } from "./firebase.js";
 import { getHashNum } from "./helpers.js";
 
-// const cellCount = 25;
-const cellCount = 4;
+const cellCount = 25;
+// const cellCount = 4;
+// todo(vmyshko): use $ids directly
 const $cellGrid = document.querySelector(".cell-grid");
 const $timer = document.querySelector(".timer");
-const $resetBtn = document.querySelector(".reset");
 
-$resetBtn.addEventListener("click", initGrid);
+$btnReset.addEventListener("click", initGrid);
+
+$btnRestart.addEventListener("click", () => {
+  //
+  $overlay.hidden = true;
+  $main.classList.remove("blurred");
+  initGrid();
+});
 
 const $root = document.querySelector(":root");
 $root.style.setProperty("--cellCount", cellCount);
 
 $cellGrid.dataset.cellCount = cellCount;
+const timer = new Timer();
 
 function initGrid() {
   //remove all
+  timer.stop();
   $cellGrid.replaceChildren();
 
   let currentNum = 1;
@@ -47,8 +56,6 @@ function initGrid() {
     $leaderboardsTableBody.appendChild(rowFragment);
   }
 
-  const timer = new Timer();
-
   timer.onUpdate((diff) => {
     const timeStr = new Date(diff).toLocaleTimeString("en-US", {
       minute: "numeric",
@@ -65,7 +72,7 @@ function initGrid() {
   }
 
   function formatScore(score) {
-    return `${score / 1000}s`;
+    return (score / 1000).toString().padEnd(5, 0) + "s";
   }
 
   async function onClick($cell) {
@@ -89,7 +96,7 @@ function initGrid() {
 
       const currentScore = timer.getDiff();
 
-      $score.textContent = formatScore(currentScore);
+      $score.textContent = "⏱️" + formatScore(currentScore);
 
       saveHiScores({
         uid: user.uid,
@@ -98,6 +105,8 @@ function initGrid() {
       });
 
       $overlay.hidden = false;
+      $main.classList.add("blurred");
+
       const leaders = await loadLeaderboards();
 
       //clear fake data

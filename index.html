@@ -10,19 +10,24 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?id=111" />
   </head>
   <body class="roboto-regular">
     <!-- <button>start</button> -->
-    <div id="cellGrid" class="cell-grid"></div>
+    <section id="$main" class="flex-col justify-center">
+      <div class="controls flex justify-center">
+        <span>⏱️</span>
+        <div class="timer">00:00</div>
+      </div>
 
-    <div class="controls">
-      <span>⏱️</span>
-      <div class="timer">00:00</div>
-      <button class="reset">🔄</button>
-    </div>
+      <div id="cellGrid" class="cell-grid"></div>
 
-    <div id="$overlay" class="overlay" hidden>
+      <div class="flex justify-center">
+        <button id="$btnReset" class="popup">reset</button>
+      </div>
+    </section>
+
+    <section id="$overlay" class="overlay" hidden>
       <div id="ppScore" class="popup">
         <div class="flex align-center justify-center">
           <div id="$avatar" class="avatar">🫥</div>
@@ -35,14 +40,14 @@
       </div>
 
       <div id="ppLeaderboards" class="popup">
-        <p>leaderboards</p>
+        <p>🏆 leaderboards</p>
 
         <template id="$tmplLeaderboardsRow">
           <tr>
-            <td class="lb-rank">1</td>
-            <td class="lb-player">🌸</td>
-            <td class="lb-score">123</td>
-            <td class="lb-date">today</td>
+            <td class="lb-rank">999</td>
+            <td class="lb-player">🫥</td>
+            <td class="lb-score">9.000s</td>
+            <td class="lb-date">00/00/0000, 00:00:00</td>
           </tr>
         </template>
 
@@ -51,40 +56,36 @@
             <thead>
               <tr>
                 <td>#</td>
-                <td>player</td>
+                <td>🫥</td>
                 <td>score</td>
                 <td>date</td>
               </tr>
             </thead>
             <tbody id="$leaderboardsTableBody">
               <tr>
-                <td>1</td>
-                <td>🌸</td>
-                <td>123</td>
-                <td>today</td>
+                <td class="lb-rank">999</td>
+                <td class="lb-player">🫥</td>
+                <td class="lb-score">9.000s</td>
+                <td class="lb-date">00/00/0000, 00:00:00</td>
               </tr>
               <tr>
-                <td>2</td>
-                <td>🌸</td>
-                <td>123</td>
-                <td>today</td>
+                <td class="lb-rank">999</td>
+                <td class="lb-player">🫥</td>
+                <td class="lb-score">9.000s</td>
+                <td class="lb-date">00/00/0000, 00:00:00</td>
               </tr>
               <tr>
-                <td>3</td>
-                <td>🌸</td>
-                <td>123</td>
-                <td>today</td>
-              </tr>
-              <tr>
-                <td>4</td>
-                <td>🌸</td>
-                <td>123</td>
-                <td>today</td>
+                <td class="lb-rank">999</td>
+                <td class="lb-player">🫥</td>
+                <td class="lb-score">9.000s</td>
+                <td class="lb-date">00/00/0000, 00:00:00</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
+
+      <button id="$btnRestart" class="popup">restart</button>
 
       <div id="ppSettings" class="popup" hidden>
         <p>settings</p>
@@ -104,7 +105,7 @@
           <span>5x5</span>
         </label>
       </div>
-    </div>
+    </section>
 
     <script type="module" src="./main.js"></script>
     <script type="module" src="./firebase.js"></script>
