@@ -3,6 +3,11 @@ import { avatars } from "./avatars.js";
 import { getUser, loadLeaderboards, saveHiScores } from "./firebase.js";
 import { getHashNum } from "./helpers.js";
 
+function getAvatarForUid(uid) {
+  const avatarId = getHashNum(uid, avatars.length);
+  return avatars[avatarId];
+}
+
 const cellCount = 25;
 // const cellCount = 4;
 // todo(vmyshko): use $ids directly
@@ -24,6 +29,10 @@ $root.style.setProperty("--cellCount", cellCount);
 $cellGrid.dataset.cellCount = cellCount;
 const timer = new Timer();
 
+getUser().then((user) => {
+  $mainAvatar.textContent = getAvatarForUid(user.uid);
+});
+
 function initGrid() {
   //remove all
   timer.stop();
@@ -38,9 +47,9 @@ function initGrid() {
     const $rank = rowFragment.querySelector(".lb-rank");
     $rank.textContent = rank;
     //player
-    const avatarId = getHashNum(uid, avatars.length);
+
     const $player = rowFragment.querySelector(".lb-player");
-    $player.textContent = avatars[avatarId];
+    $player.textContent = getAvatarForUid(uid);
     //score
     const $score = rowFragment.querySelector(".lb-score");
     $score.textContent = formatScore(score);
@@ -65,11 +74,6 @@ function initGrid() {
 
     $timer.textContent = timeStr;
   });
-
-  function getAvatarForUid(uid) {
-    const avatarId = getHashNum(uid, avatars.length);
-    return avatars[avatarId];
-  }
 
   function formatScore(score) {
     return (score / 1000).toString().padEnd(5, 0) + "s";
