@@ -1,6 +1,6 @@
 import { Timer } from "./timer.js";
 import { getAvatarForUid } from "./avatars.js";
-import { getUser, loadLeaderboards, saveHiScores } from "./firebase.js";
+import { signAnonUser, loadHiScores, saveHiScores } from "./firebase.js";
 
 import { cellCount } from "./config.js";
 import { solve } from "./helpers.js";
@@ -13,7 +13,7 @@ $btnReset.addEventListener("click", initGrid);
 
 $btnRestart.addEventListener("click", () => {
   //
-  $overlay.hidden = true;
+  $overlayHiScores.hidden = true;
   $main.classList.remove("blurred");
   initGrid();
 });
@@ -33,7 +33,11 @@ if (cheat === "#cheat") {
   $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
 }
 
-getUser().then((user) => {
+// $mainAvatar.addEventListener("click", () => {
+//   signUser();
+// });
+
+signAnonUser().then((user) => {
   $mainAvatar.textContent = getAvatarForUid(user.uid);
 });
 
@@ -83,6 +87,61 @@ function initGrid() {
     return (score / 1000).toString().padEnd(5, 0) + "s";
   }
 
+  async function processWin() {
+    timer.stop();
+
+    // todo(vmyshko): show win and leaders
+
+    const user = await signAnonUser();
+
+    $avatar.textContent = getAvatarForUid(user.uid);
+
+    const currentScore = timer.getDiff();
+
+    $score.textContent = "⏱️" + formatScore(currentScore);
+
+    await saveHiScores({
+      uid: user.uid,
+      score: currentScore,
+      date: new Date(),
+    });
+
+    $overlayHiScores.hidden = false;
+    $main.classList.add("blurred");
+
+    const leaders = await loadHiScores();
+
+    //clear fake data
+    $leaderboardsTableBody.replaceChildren();
+
+    let rank = 0;
+    let currentRank = 0;
+    leaders.forEach((doc) => {
+      const userData = {
+        uid: doc.id,
+        ...doc.data(),
+      };
+      rank++;
+
+      const isCurrent =
+        userData.uid === user.uid && userData.score === currentScore;
+      if (isCurrent) {
+        currentRank = rank;
+      }
+
+      addLeaderboardsRow({ ...userData, rank, isCurrent });
+    });
+
+    const rowHeight =
+      $leaderboardsContainer.querySelector("tbody>tr").clientHeight;
+
+    $leaderboardsContainer.scrollTo({
+      top: rowHeight * (currentRank - 2),
+      left: 0,
+      behavior: "smooth",
+    });
+  }
+
   async function onClick($cell) {
     if ($cell.classList.contains("checked")) return;
 
@@ -94,58 +153,7 @@ function initGrid() {
     if (currentNum > cellCount) {
       //win
 
-      timer.stop();
-
-      // todo(vmyshko): show win and leaders
-
-      const user = await getUser();
-
-      $avatar.textContent = getAvatarForUid(user.uid);
-
-      const currentScore = timer.getDiff();
-
-      $score.textContent = "⏱️" + formatScore(currentScore);
-
-      await saveHiScores({
-        uid: user.uid,
-        score: currentScore,
-        date: new Date(),
-      });
-
-      $overlay.hidden = false;
-      $main.classList.add("blurred");
-
-      const leaders = await loadLeaderboards();
-
-      //clear fake data
-      $leaderboardsTableBody.replaceChildren();
-
-      let rank = 0;
-      let currentRank = 0;
-      leaders.forEach((doc) => {
-        const userData = {
-          uid: doc.id,
-          ...doc.data(),
-        };
-        rank++;
-
-        const isCurrent =
-          userData.uid === user.uid && userData.score === currentScore;
-        if (isCurrent) {
-          currentRank = rank;
-        }
-
-        addLeaderboardsRow({ ...userData, rank, isCurrent });
-      });
-
-      const rowHeight =
-        $leaderboardsContainer.querySelector("tbody>tr").clientHeight;
-
-      $leaderboardsContainer.scrollTo({
-        top: rowHeight * (currentRank - 2),
-        left: 0,
-        behavior: "smooth",
-      });
+      processWin();
     }
   }
 

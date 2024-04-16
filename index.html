@@ -29,7 +29,7 @@
       </div>
     </section>
 
-    <section id="$overlay" class="overlay" hidden>
+    <section id="$overlayHiScores" class="overlay" hidden>
       <div id="ppScore" class="popup">
         <div class="flex align-center justify-center">
           <div id="$avatar" class="avatar">🫥</div>
@@ -88,25 +88,43 @@
       </div>
 
       <button id="$btnRestart" class="popup">restart</button>
+    </section>
 
-      <div id="ppSettings" class="popup" hidden>
+    <section id="$overlaySettings" class="overlay" hidden>
+      <div id="ppSettings" class="popup">
         <p>settings</p>
 
-        <span>difficulty</span>
+        <div style="font-size: 7vmin" class="flex-col">
+          <span>difficulty:</span>
 
-        <label>
-          <input type="radio" name="difficulty" checked />
-          <span>3x3</span>
-        </label>
-        <label>
-          <input type="radio" name="difficulty" />
-          <span>4x4</span>
-        </label>
-        <label>
-          <input type="radio" name="difficulty" />
-          <span>5x5</span>
-        </label>
+          <div class="flex-col">
+            <label>
+              <input type="radio" name="difficulty" checked />
+              <span>3️⃣</span>
+            </label>
+            <label>
+              <input type="radio" name="difficulty" />
+              <span>4️⃣</span>
+            </label>
+            <label>
+              <input type="radio" name="difficulty" />
+              <span>5️⃣</span>
+            </label>
+            <label>
+              <input type="radio" name="difficulty" />
+              <span>6️⃣</span>
+            </label>
+          </div>
+
+          <span>mode</span>
+          <label>
+            <input type="checkbox" name="mode" checked />
+            <span>dim selected</span>
+          </label>
+        </div>
       </div>
+
+      <button id="$btnSettingsBack" class="popup">back</button>
     </section>
 
     <script type="module" src="./main.js"></script>

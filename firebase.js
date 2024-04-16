@@ -15,10 +15,12 @@ import {
 import {
   getAuth,
   signInAnonymously,
-  //   GoogleAuthProvider,
+  signInWithPopup,
+  GoogleAuthProvider,
   //   EmailAuthProvider,
-  //   linkWithCredential,
+  linkWithCredential,
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
 import { firebaseConfig, hiScoresTableName } from "./config.js";
 import { getAvatarForUid } from "./avatars.js";
 
@@ -26,7 +28,7 @@ import { getAvatarForUid } from "./avatars.js";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function loadLeaderboards() {
+export async function loadHiScores() {
   const hiScoresRef = collection(db, hiScoresTableName);
 
   const querySnapshot = getDocs(
@@ -80,7 +82,7 @@ export async function saveHiScores({ uid, score, date }) {
   return savePlayerHiScore({ uid, score, date });
 }
 
-export async function getUser() {
+export async function signAnonUser() {
   const auth = getAuth();
 
   try {
