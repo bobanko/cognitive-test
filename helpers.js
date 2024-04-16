@@ -23,7 +23,10 @@ function wait(ms) {
 }
 
 export async function solve(totalMs = 3e4) {
-  var clickEvent = new Event("mousedown", { bubbles: true, cancelable: false });
+  var clickEvent = new Event("touchstart", {
+    bubbles: true,
+    cancelable: false,
+  });
 
   const cellGrid = document.querySelector(".cell-grid");
 
