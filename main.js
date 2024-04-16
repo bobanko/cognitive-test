@@ -165,7 +165,15 @@ function initGrid() {
     $cell.classList.add("cell");
 
     $cell.dataset.number = cellNumber;
-    $cell.addEventListener("mousedown", () => onClick($cell));
+
+    function handleClickEvent(event) {
+      console.log(event.type);
+      event.preventDefault(); //prevent both touch and click
+      onClick($cell);
+    }
+
+    $cell.addEventListener("click", handleClickEvent);
+    $cell.addEventListener("touchstart", handleClickEvent);
 
     preCells.splice(Math.floor(Math.random() * cellNumber), 0, $cell);
   }
