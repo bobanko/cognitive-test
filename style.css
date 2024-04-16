@@ -182,9 +182,11 @@ div.popup {
 
 .leaderboards {
   font-size: 9vmin;
-  max-height: 50vmin;
-  overflow: scroll;
   border-collapse: collapse;
+}
+
+.leaderboards-popup {
+  overflow: hidden;
 }
 
 td {
@@ -201,7 +203,6 @@ td.lb-date {
 }
 
 .table-container {
-  max-height: 50vmin;
   overflow: scroll;
 }
 
