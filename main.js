@@ -3,6 +3,7 @@ import { getAvatarForUid } from "./avatars.js";
 import { getUser, loadLeaderboards, saveHiScores } from "./firebase.js";
 
 import { cellCount } from "./config.js";
+import { solve } from "./helpers.js";
 
 // todo(vmyshko): use $ids directly
 const $cellGrid = document.querySelector(".cell-grid");
@@ -22,6 +23,15 @@ $root.style.setProperty("--cellCount", cellCount);
 
 $cellGrid.dataset.cellCount = cellCount;
 const timer = new Timer();
+
+// todo(vmyshko): cheat for quick auto solve
+const [cheat, secondsToSolve] = location.hash.split("/");
+if (cheat === "#cheat") {
+  console.log("🤥 Cheater detected");
+  $clockIcon.textContent = "🤥";
+  // todo(vmyshko): get time after click, dynamically
+  $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
+}
 
 getUser().then((user) => {
   $mainAvatar.textContent = getAvatarForUid(user.uid);
