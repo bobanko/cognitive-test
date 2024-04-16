@@ -142,11 +142,42 @@ function initGrid() {
     });
   }
 
+  const animations = {
+    disabled: [
+      [{}, { backgroundColor: "dimgray", fontSize: "9vmin" }, {}],
+      {
+        duration: 200,
+        iterations: 1,
+      },
+    ],
+    wrong: [
+      [{}, { backgroundColor: "red", fontSize: "9vmin" }, {}],
+      {
+        duration: 200,
+        iterations: 1,
+      },
+    ],
+    proper: [
+      [{}, { backgroundColor: "greenyellow", fontSize: "9vmin" }, {}],
+      {
+        duration: 300,
+        iterations: 1,
+      },
+    ],
+  };
+
   async function onClick($cell) {
-    if ($cell.classList.contains("checked")) return;
+    if ($cell.classList.contains("checked")) {
+      $cell.animate(...animations.disabled);
+      return;
+    }
 
-    if (+$cell.dataset.number !== currentNum) return;
+    if (+$cell.dataset.number !== currentNum) {
+      $cell.animate(...animations.wrong);
+      return;
+    }
 
+    $cell.animate(...animations.proper);
     $cell.classList.add("checked");
     currentNum++;
 
@@ -172,7 +203,7 @@ function initGrid() {
       onClick($cell);
     }
 
-    $cell.addEventListener("click", handleClickEvent);
+    $cell.addEventListener("mousedown", handleClickEvent);
     $cell.addEventListener("touchstart", handleClickEvent);
 
     preCells.splice(Math.floor(Math.random() * cellNumber), 0, $cell);
