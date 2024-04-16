@@ -4,8 +4,6 @@ export const cellCount = 25;
 // todo(vmyshko): switch between modes?
 // export const hiScoresTableName = "hiScores-2x2";
 export const hiScoresTableName = "hiScores-5x5";
-// export const leaderboardsTableName = "leaderboards"; // todo(vmyshko): can't rename from fb, need to write code for that migration
-// export const leaderboardsTableName = "leaderboards-5x5"; // todo(vmyshko): can't rename from fb, need to write code for that migration
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
