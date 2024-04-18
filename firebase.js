@@ -134,17 +134,19 @@ export function linkAnonUser() {
       //   alert("linked OK");
     })
     .catch((error) => {
-      if (error.code === "auth/credential-already-in-use") {
-        // todo(vmyshko): propose to merge accounts:
-        // select which to keep: avatar/ score(best?)
-        // delete other one
-        // re-login with google?
-      }
-
       console.log("Error upgrading anonymous account", error);
       //   alert(`linked ERROR \n${JSON.stringify(error)}`);
       // Handle Errors here.
       // ...
+
+      if (error.code === "auth/credential-already-in-use") {
+        // todo(vmyshko): propose to merge accounts:
+
+        console.log("todo: propose merge");
+        // select which to keep: avatar/ score(best?)
+        // delete other one
+        // re-login with google?
+      }
     });
 }
 // todo(vmyshko): convert anon to registered
