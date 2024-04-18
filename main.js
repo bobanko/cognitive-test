@@ -13,12 +13,28 @@ import { cellCount } from "./config.js";
 import { solve } from "./helpers.js";
 
 $btnReset.addEventListener("click", initGrid);
+$btnSettings.addEventListener("click", openSettings);
+$btnSettingsBack.addEventListener("click", closeSettings);
 
+// todo(vmyshko): use history api?
 $btnRestart.addEventListener("click", () => {
   $overlayHiScores.hidden = true;
   $main.classList.remove("blurred");
   initGrid();
 });
+
+function openSettings() {
+  $overlaySettings.hidden = false;
+  $main.classList.add("blurred");
+  timer.stop();
+}
+
+function closeSettings() {
+  $overlaySettings.hidden = true;
+  $main.classList.remove("blurred");
+  // todo(vmyshko): update with new settings
+  initGrid();
+}
 
 // todo(vmyshko): on init new settings
 const $root = document.querySelector(":root");
@@ -36,7 +52,7 @@ if (cheat === "#cheat") {
   $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
 }
 
-$btnLink.addEventListener("click", () => {
+$btnLinkAccount.addEventListener("click", () => {
   linkAnonUser();
 });
 
@@ -55,11 +71,12 @@ onAuthStateChanged((user) => {
     $main.hidden = false;
     $splash.hidden = true;
 
-    $btnLink.disabled = !user.isAnonymous;
+    $btnLinkAccount.disabled = !user.isAnonymous;
 
     const av = getAvatarForUid(user.uid);
     $mainAvatar.textContent = av;
-    $avatar.textContent = av;
+    $hiScoresAvatar.textContent = av;
+    $settingsAvatar.textContent = av;
   }
 });
 

@@ -36,15 +36,15 @@
       <div id="$cellGrid" class="cell-grid"></div>
 
       <div class="flex justify-center">
-        <button id="$btnReset" class="popup">reset</button>
-        <button id="$btnLink" class="" hidden>link</button>
+        <button id="$btnReset">reset</button>
+        <button id="$btnSettings">⚙️</button>
       </div>
     </section>
 
     <section id="$overlayHiScores" class="overlay" hidden>
       <div id="ppScore" class="popup">
         <div class="flex align-center justify-center">
-          <div id="$avatar" class="avatar">🫥</div>
+          <div id="$hiScoresAvatar" class="hiScores-avatar">🫥</div>
 
           <div class="flex-col align-center">
             <div>your score:</div>
@@ -99,44 +99,65 @@
         </div>
       </div>
 
-      <button id="$btnRestart" class="popup">restart</button>
+      <div class="flex">
+        <button id="$btnRestart">restart</button>
+      </div>
     </section>
 
     <section id="$overlaySettings" class="overlay" hidden>
-      <div id="ppSettings" class="popup">
-        <p>settings</p>
+      <div id="ppSettings" class="popup settings">
+        <p>⚙️ settings</p>
 
-        <div style="font-size: 7vmin" class="flex-col">
-          <span>difficulty:</span>
+        <div class="flex-col">
+          <span>🔢 difficulty</span>
 
-          <div class="flex-col">
-            <label>
+          <div class="difficulty-container">
+            <label class="flex align-center">
               <input type="radio" name="difficulty" checked />
+              <span>2️⃣</span>
+            </label>
+            <label class="flex align-center">
+              <input type="radio" name="difficulty" />
               <span>3️⃣</span>
             </label>
-            <label>
+            <label class="flex align-center">
               <input type="radio" name="difficulty" />
               <span>4️⃣</span>
             </label>
-            <label>
+            <label class="flex align-center">
               <input type="radio" name="difficulty" />
               <span>5️⃣</span>
             </label>
-            <label>
+
+            <!-- <label class="flex align-center">
               <input type="radio" name="difficulty" />
               <span>6️⃣</span>
-            </label>
+            </label> -->
           </div>
-
-          <span>mode</span>
-          <label>
-            <input type="checkbox" name="mode" checked />
-            <span>dim selected</span>
-          </label>
         </div>
+
+        <span>mode</span>
+        <label>
+          <input type="checkbox" name="mode" checked disabled />
+          <span>dim selected</span>
+        </label>
+
+        <span>account</span>
+
+        <button id="$btnLinkAccount" class="btn-small" disabled>
+          <span class="label-enabled">link google</span>
+          <span class="label-disabled">☑️ google linked</span>
+        </button>
+
+        <span>avatar</span>
+
+        <label class="flex align-center">
+          <span id="$settingsAvatar" class="settings-avatar">🫥</span>
+          <button class="btn-small">choose...</button>
+        </label>
       </div>
 
-      <button id="$btnSettingsBack" class="popup">back</button>
+      <button id="$btnSettingsBack">back</button>
     </section>
 
     <script type="module" src="./main.js"></script>
