@@ -28,9 +28,7 @@ export async function solve(totalMs = 3e4) {
     cancelable: false,
   });
 
-  const cellGrid = document.querySelector(".cell-grid");
-
-  const sortedCells = [...cellGrid.children].sort(
+  const sortedCells = [...$cellGrid.children].sort(
     (a, b) => +a.dataset.number - +b.dataset.number
   );
 

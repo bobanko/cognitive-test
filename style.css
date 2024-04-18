@@ -36,19 +36,26 @@ option {
   font-style: inherit;
   font-weight: inherit;
 }
-
 /* default components styling */
+
 button {
   background-color: #2196f3;
   cursor: pointer;
 }
 
-button:hover {
+button:not([disabled]):hover {
   background-color: #6bbdff;
 }
 
-button:active {
+button:not([disabled]):active,
+button:not([disabled]):focus {
   background-color: #0e7cd6;
+}
+
+/* Disable blue highlight on button click */
+button {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 /* helpers */
@@ -215,4 +222,40 @@ thead {
 
 .current {
   background-color: gold;
+}
+
+/* ------------- */
+.splash {
+  color: white;
+}
+
+.splash-title-1 {
+  font-size: 9vmin;
+}
+
+.splash-title-2 {
+  text-transform: capitalize;
+  font-size: 19vmin;
+  line-height: 15vmin;
+}
+
+.splash-loading {
+  font-size: 20vmin;
+  font-size: 9vmin;
+  padding: 9vmin;
+  animation: pulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.2;
+  }
+}
+
+.loader {
+  width: 40vmin;
+  height: 40vmin;
 }

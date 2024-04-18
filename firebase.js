@@ -19,6 +19,8 @@ import {
   GoogleAuthProvider,
   //   EmailAuthProvider,
   linkWithCredential,
+  linkWithRedirect,
+  linkWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 import { firebaseConfig, hiScoresTableName } from "./config.js";
@@ -82,6 +84,14 @@ export async function saveHiScores({ uid, score, date }) {
   return savePlayerHiScore({ uid, score, date });
 }
 
+export function getCurrentUser() {
+  return getAuth().currentUser;
+}
+
+export function onAuthStateChanged(handler) {
+  getAuth().onAuthStateChanged(handler);
+}
+
 export async function signAnonUser() {
   const auth = getAuth();
 
@@ -102,5 +112,40 @@ export async function signAnonUser() {
   }
 }
 
+export function linkAnonUser() {
+  const auth = getAuth();
+
+  const provider = new GoogleAuthProvider();
+
+  if (!auth.currentUser.isAnonymous) {
+    console.log("cant link, acc is NOT anon", auth.currentUser);
+    return;
+  }
+
+  linkWithPopup(auth.currentUser, provider)
+    .then((result) => {
+      // Accounts successfully linked.
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const user = result.user;
+      // ...
+
+      console.log("linked", credential, user);
+      console.log("Anonymous account successfully upgraded", user);
+      //   alert("linked OK");
+    })
+    .catch((error) => {
+      if (error.code === "auth/credential-already-in-use") {
+        // todo(vmyshko): propose to merge accounts:
+        // select which to keep: avatar/ score(best?)
+        // delete other one
+        // re-login with google?
+      }
+
+      console.log("Error upgrading anonymous account", error);
+      //   alert(`linked ERROR \n${JSON.stringify(error)}`);
+      // Handle Errors here.
+      // ...
+    });
+}
 // todo(vmyshko): convert anon to registered
 // https://firebase.google.com/docs/auth/web/anonymous-auth#web-modular-api_3

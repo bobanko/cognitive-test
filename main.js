@@ -1,23 +1,26 @@
 import { Timer } from "./timer.js";
 import { getAvatarForUid } from "./avatars.js";
-import { signAnonUser, loadHiScores, saveHiScores } from "./firebase.js";
+import {
+  signAnonUser,
+  linkAnonUser,
+  loadHiScores,
+  saveHiScores,
+  getCurrentUser,
+  onAuthStateChanged,
+} from "./firebase.js";
 
 import { cellCount } from "./config.js";
 import { solve } from "./helpers.js";
 
-// todo(vmyshko): use $ids directly
-const $cellGrid = document.querySelector(".cell-grid");
-const $timer = document.querySelector(".timer");
-
 $btnReset.addEventListener("click", initGrid);
 
 $btnRestart.addEventListener("click", () => {
-  //
   $overlayHiScores.hidden = true;
   $main.classList.remove("blurred");
   initGrid();
 });
 
+// todo(vmyshko): on init new settings
 const $root = document.querySelector(":root");
 $root.style.setProperty("--cellCount", cellCount);
 
@@ -33,12 +36,31 @@ if (cheat === "#cheat") {
   $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
 }
 
-// $mainAvatar.addEventListener("click", () => {
-//   signUser();
-// });
+$btnLink.addEventListener("click", () => {
+  linkAnonUser();
+});
 
-signAnonUser().then((user) => {
-  $mainAvatar.textContent = getAvatarForUid(user.uid);
+onAuthStateChanged((user) => {
+  console.log("user changed", user);
+
+  if (!user) {
+    //no user logged
+    //show splash
+    $main.hidden = true;
+    $splash.hidden = false;
+    signAnonUser();
+  } else {
+    //user exists/logged
+    //show main
+    $main.hidden = false;
+    $splash.hidden = true;
+
+    $btnLink.disabled = !user.isAnonymous;
+
+    const av = getAvatarForUid(user.uid);
+    $mainAvatar.textContent = av;
+    $avatar.textContent = av;
+  }
 });
 
 function initGrid() {
@@ -92,13 +114,11 @@ function initGrid() {
 
     // todo(vmyshko): show win and leaders
 
-    const user = await signAnonUser();
-
-    $avatar.textContent = getAvatarForUid(user.uid);
-
     const currentScore = timer.getDiff();
 
     $score.textContent = "⏱️" + formatScore(currentScore);
+
+    const user = getCurrentUser();
 
     await saveHiScores({
       uid: user.uid,

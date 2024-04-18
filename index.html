@@ -14,18 +14,30 @@
     <link rel="icon" type="image/png" href="./favicon.png" />
   </head>
   <body class="roboto-regular">
-    <!-- <button>start</button> -->
-    <section id="$main" class="flex-col justify-center">
+    <section id="$splash" class="splash flex-col align-center">
+      <img
+        class="loader"
+        src="./favicon.png"
+        alt="loading"
+        srcset="./octopus.gif"
+      />
+      <span class="splash-title-1">cognitive</span>
+      <span class="splash-title-2">test</span>
+      <span class="splash-loading">loading...</span>
+    </section>
+
+    <section id="$main" class="flex-col justify-center" hidden>
       <div class="controls flex justify-center">
         <span id="$mainAvatar">🫥</span>
-        <div class="timer">00:00</div>
+        <div id="$timer" class="timer">00:00</div>
         <span id="$clockIcon">⏱️</span>
       </div>
 
-      <div id="cellGrid" class="cell-grid"></div>
+      <div id="$cellGrid" class="cell-grid"></div>
 
       <div class="flex justify-center">
         <button id="$btnReset" class="popup">reset</button>
+        <button id="$btnLink" class="" hidden>link</button>
       </div>
     </section>
 
