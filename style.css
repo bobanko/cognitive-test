@@ -41,6 +41,7 @@ option {
 button {
   background-color: #2196f3;
   cursor: pointer;
+  color: black;
 }
 
 button:not([disabled]):active {
