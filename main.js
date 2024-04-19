@@ -4,12 +4,12 @@ import {
   signAnonUser,
   linkAnonUser,
   loadHiScores,
-  saveHiScores,
   getCurrentUser,
   onAuthStateChanged,
+  savePlayerHiScore,
 } from "./firebase.js";
 
-import { cellCount } from "./config.js";
+import { difficultyLevels } from "./config.js";
 import { solve } from "./helpers.js";
 
 $btnReset.addEventListener("click", initGrid);
@@ -20,8 +20,22 @@ $btnSettingsBack.addEventListener("click", closeSettings);
 $btnRestart.addEventListener("click", () => {
   $overlayHiScores.hidden = true;
   $main.classList.remove("blurred");
+
   initGrid();
 });
+
+function getCurrentDifLevel() {
+  const selectedDifficultyLevelId = $difficultyOptions.querySelector(
+    ".difficulty-value:checked"
+  ).value;
+
+  const currentDifLevel =
+    difficultyLevels.find(
+      (difLevel) => difLevel.id === selectedDifficultyLevelId
+    ) || difficultyLevels[0];
+
+  return currentDifLevel;
+}
 
 function openSettings() {
   $overlaySettings.hidden = false;
@@ -32,15 +46,12 @@ function openSettings() {
 function closeSettings() {
   $overlaySettings.hidden = true;
   $main.classList.remove("blurred");
+
   // todo(vmyshko): update with new settings
+
   initGrid();
 }
 
-// todo(vmyshko): on init new settings
-const $root = document.querySelector(":root");
-$root.style.setProperty("--cellCount", cellCount);
-
-$cellGrid.dataset.cellCount = cellCount;
 const timer = new Timer();
 
 // todo(vmyshko): cheat for quick auto solve
@@ -55,6 +66,32 @@ if (cheat === "#cheat") {
 $btnLinkAccount.addEventListener("click", () => {
   linkAnonUser();
 });
+
+// todo(vmyshko): init difficulty options
+function initDifficultyOptions() {
+  $difficultyOptions.replaceChildren();
+
+  difficultyLevels.forEach((difLevel) => {
+    const optionFragment = $tmplDifficultyOption.content.cloneNode(true);
+
+    //caption
+    const $optionCaption = optionFragment.querySelector(".difficulty-caption");
+    $optionCaption.textContent = difLevel.text;
+
+    //value
+    const $optionValue = optionFragment.querySelector(".difficulty-value");
+    $optionValue.value = difLevel.id;
+
+    // todo(vmyshko): check current level
+    if (difLevel.id === "2x2") {
+      $optionValue.checked = true;
+    }
+
+    $difficultyOptions.appendChild(optionFragment);
+  });
+}
+
+initDifficultyOptions();
 
 onAuthStateChanged((user) => {
   console.log("user changed", user);
@@ -81,9 +118,14 @@ onAuthStateChanged((user) => {
 });
 
 function initGrid() {
+  const { cellCount, tableName } = getCurrentDifLevel();
   //remove all
   timer.stop();
   $cellGrid.replaceChildren();
+
+  // todo(vmyshko): on init new settings
+  const $root = document.querySelector(":root");
+  $root.style.setProperty("--cellCount", cellCount);
 
   let currentNum = 1;
 
@@ -137,16 +179,19 @@ function initGrid() {
 
     const user = getCurrentUser();
 
-    await saveHiScores({
+    await savePlayerHiScore({
       uid: user.uid,
       score: currentScore,
       date: new Date(),
+      hiScoresTableName: tableName,
     });
 
     $overlayHiScores.hidden = false;
     $main.classList.add("blurred");
 
-    const leaders = await loadHiScores();
+    const leaders = await loadHiScores({
+      hiScoresTableName: tableName,
+    });
 
     //clear fake data
     $leaderboardsTableBody.replaceChildren();
@@ -225,15 +270,15 @@ function initGrid() {
     }
   }
 
+  //create cells
   const preCells = [];
   for (let cellNumber = 1; cellNumber <= cellCount; cellNumber++) {
-    //
-
     const $cell = document.createElement("div");
     $cell.classList.add("cell");
 
     $cell.dataset.number = cellNumber;
 
+    // todo(vmyshko): extract handler
     function handleClickEvent(event) {
       console.log(event.type);
       event.preventDefault(); //prevent both touch and click
@@ -252,4 +297,5 @@ function initGrid() {
 }
 
 //
+
 initGrid();

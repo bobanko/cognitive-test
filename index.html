@@ -111,28 +111,30 @@
         <div class="flex-col">
           <span>🔢 difficulty</span>
 
-          <div class="difficulty-container">
+          <template id="$tmplDifficultyOption">
             <label class="flex align-center">
-              <input type="radio" name="difficulty" checked />
-              <span>2️⃣</span>
+              <input class="difficulty-value" type="radio" name="difficulty" />
+              <span class="difficulty-caption">🔢</span>
             </label>
-            <label class="flex align-center">
-              <input type="radio" name="difficulty" />
-              <span>3️⃣</span>
-            </label>
-            <label class="flex align-center">
-              <input type="radio" name="difficulty" />
-              <span>4️⃣</span>
-            </label>
-            <label class="flex align-center">
-              <input type="radio" name="difficulty" />
-              <span>5️⃣</span>
-            </label>
+          </template>
 
-            <!-- <label class="flex align-center">
-              <input type="radio" name="difficulty" />
-              <span>6️⃣</span>
-            </label> -->
+          <div id="$difficultyOptions" class="difficulty-container">
+            <label class="flex align-center">
+              <input class="difficulty-value" type="radio" name="difficulty" />
+              <span class="difficulty-caption">🔢</span>
+            </label>
+            <label class="flex align-center">
+              <input class="difficulty-value" type="radio" name="difficulty" />
+              <span class="difficulty-caption">🔢</span>
+            </label>
+            <label class="flex align-center">
+              <input class="difficulty-value" type="radio" name="difficulty" />
+              <span class="difficulty-caption">🔢</span>
+            </label>
+            <label class="flex align-center">
+              <input class="difficulty-value" type="radio" name="difficulty" />
+              <span class="difficulty-caption">🔢</span>
+            </label>
           </div>
         </div>
 
@@ -153,14 +155,14 @@
 
         <label class="flex align-center">
           <span id="$settingsAvatar" class="settings-avatar">🫥</span>
-          <button class="btn-small">choose...</button>
+          <button class="btn-small" disabled>choose...</button>
         </label>
       </div>
 
       <button id="$btnSettingsBack">back</button>
     </section>
 
-    <script type="module" src="./main.js"></script>
     <script type="module" src="./firebase.js"></script>
+    <script type="module" src="./main.js"></script>
   </body>
 </html>

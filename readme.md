@@ -10,10 +10,10 @@
 
 ## other improvements:
 
-[ ] choose difficulty level 3x3, 4x4, 5x5 etc.  
 [ ] remove gray effect for selected (for difficult mode?)  
 [ ] add 5m timeout to loose  
 [ ] make different screens as diff pages via location history
+[x] choose difficulty level 3x3, 4x4, 5x5 etc.
 
 ## leaderboard:
 
@@ -29,9 +29,22 @@
 
 ## auth:
 
-[ ] make auth with email/pw + google etc.  
 [ ] input user name / age  
 [ ] select av  
+[~] make auth with email/pw + google etc.  
 [x] keep only best result per player
 
 [ ]
+
+---
+
+auth flow:
+
+user opens page  
+auth exists?
+
+- show game  
+  no auth?
+- auth as anon
+
+in settings can link acc

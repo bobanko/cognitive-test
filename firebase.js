@@ -23,14 +23,14 @@ import {
   linkWithPopup,
 } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-import { firebaseConfig, hiScoresTableName } from "./config.js";
+import { firebaseConfig } from "./config.js";
 import { getAvatarForUid } from "./avatars.js";
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-export async function loadHiScores() {
+export async function loadHiScores({ hiScoresTableName }) {
   const hiScoresRef = collection(db, hiScoresTableName);
 
   const querySnapshot = getDocs(
@@ -44,7 +44,12 @@ export async function loadHiScores() {
   return querySnapshot;
 }
 
-export async function savePlayerHiScore({ uid, score, date }) {
+export async function savePlayerHiScore({
+  uid,
+  score,
+  date,
+  hiScoresTableName,
+}) {
   const hiScoreRef = doc(db, hiScoresTableName, uid);
   const hiScoreSnap = await getDoc(hiScoreRef);
 
@@ -77,11 +82,6 @@ export async function savePlayerHiScore({ uid, score, date }) {
     score,
     date,
   });
-}
-
-export async function saveHiScores({ uid, score, date }) {
-  // test
-  return savePlayerHiScore({ uid, score, date });
 }
 
 export function getCurrentUser() {
