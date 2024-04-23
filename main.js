@@ -129,7 +129,14 @@ function initGrid() {
 
   let currentNum = 1;
 
-  function addLeaderboardsRow({ uid, rank, score, date, isCurrentScore }) {
+  function addLeaderboardsRow({
+    uid,
+    rank,
+    score,
+    date,
+    isCurrentScore,
+    isCurrentUser,
+  }) {
     const rowFragment = $tmplLeaderboardsRow.content.cloneNode(true);
 
     //rank
@@ -147,9 +154,14 @@ function initGrid() {
     const $date = rowFragment.querySelector(".lb-date");
     $date.textContent = date.toDate().toLocaleString();
 
+    const $tr = rowFragment.querySelector("tr");
+
+    if (isCurrentUser) {
+      $tr.classList.add("current-user");
+    }
+
     if (isCurrentScore) {
-      const $tr = rowFragment.querySelector("tr");
-      $tr.classList.add("current");
+      $tr.classList.add("current-score");
     }
 
     $leaderboardsTableBody.appendChild(rowFragment);
@@ -210,7 +222,7 @@ function initGrid() {
 
       const isCurrentScore = isCurrentUser && userData.score === currentScore;
 
-      if (isCurrentScore) {
+      if (isCurrentScore || isCurrentUser) {
         currentRank = rank;
       }
 

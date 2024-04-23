@@ -249,8 +249,12 @@ thead {
   z-index: 1;
 }
 
-.current {
-  background-color: gold;
+.current-user {
+  background-color: #ffd90080;
+}
+
+.current-score {
+  background-color: #ffd900;
 }
 /* ------------- */
 
