@@ -2,21 +2,22 @@
 
 ## ui:
 
-[ ] fix landscape mode / for desktops  
-[ ] add animated avs from https://emojipedia.org/animated-noto-color-emoji  
-[x] scroll to current result in table  
-[x] choose by mousedown, not click to avoid misclicks (implemented, to check)  
-[x] make green/red effect for right/wrong?
+[ ] add animated avs from https://emojipedia.org/animated-noto-color-emoji
 
 ## other improvements:
 
 [ ] remove gray effect for selected (for difficult mode?)  
 [ ] add 5m timeout to loose  
 [ ] make different screens as diff pages via location history
-[x] choose difficulty level 3x3, 4x4, 5x5 etc.
 
 ## leaderboard:
 
+[ ] add crown or 1/2/3 medals for top winners  
+[ ] add notif for winner if someone beaten them  
+[ ] add message from new winner (to looser)?  
+[ ] hi score tabs for other difficulties  
+[ ] get/show country  
+[ ] show leaders by country/global?  
 [ ] show last/best scores  
 [ ] scroll to current result in table when clicking on av  
 [ ] show scores like:
@@ -31,20 +32,19 @@
 
 [ ] input user name / age  
 [ ] select av  
-[~] make auth with email/pw + google etc.  
-[x] keep only best result per player
+[~] make auth with email/pw + google etc.
 
 [ ]
 
----
+## to think about it
 
-auth flow:
+[] async multiplayer ?
 
-user opens page  
-auth exists?
+# done
 
-- show game  
-  no auth?
-- auth as anon
-
-in settings can link acc
+[x] fix landscape mode / for desktops  
+[x] keep only best result per player  
+[x] choose difficulty level 3x3, 4x4, 5x5 etc.  
+[x] scroll to current result in table  
+[x] choose by mousedown, not click to avoid misclicks (implemented, to check)  
+[x] make green/red effect for right/wrong?

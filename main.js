@@ -129,16 +129,17 @@ function initGrid() {
 
   let currentNum = 1;
 
-  function addLeaderboardsRow({ uid, rank, score, date, isCurrent }) {
+  function addLeaderboardsRow({ uid, rank, score, date, isCurrentScore }) {
     const rowFragment = $tmplLeaderboardsRow.content.cloneNode(true);
 
     //rank
     const $rank = rowFragment.querySelector(".lb-rank");
     $rank.textContent = rank;
-    //player
 
+    //player
     const $player = rowFragment.querySelector(".lb-player");
     $player.textContent = getAvatarForUid(uid);
+
     //score
     const $score = rowFragment.querySelector(".lb-score");
     $score.textContent = formatScore(score);
@@ -146,7 +147,7 @@ function initGrid() {
     const $date = rowFragment.querySelector(".lb-date");
     $date.textContent = date.toDate().toLocaleString();
 
-    if (isCurrent) {
+    if (isCurrentScore) {
       const $tr = rowFragment.querySelector("tr");
       $tr.classList.add("current");
     }
@@ -205,13 +206,20 @@ function initGrid() {
       };
       rank++;
 
-      const isCurrent =
-        userData.uid === user.uid && userData.score === currentScore;
-      if (isCurrent) {
+      const isCurrentUser = userData.uid === user.uid;
+
+      const isCurrentScore = isCurrentUser && userData.score === currentScore;
+
+      if (isCurrentScore) {
         currentRank = rank;
       }
 
-      addLeaderboardsRow({ ...userData, rank, isCurrent });
+      addLeaderboardsRow({
+        ...userData,
+        rank,
+        isCurrentScore,
+        isCurrentUser,
+      });
     });
 
     const rowHeight =
@@ -226,21 +234,21 @@ function initGrid() {
 
   const animations = {
     disabled: [
-      [{}, { backgroundColor: "dimgray", fontSize: "9vmin" }, {}],
+      [{}, { backgroundColor: "dimgray", fontSize: "1.5rem" }, {}],
       {
         duration: 200,
         iterations: 1,
       },
     ],
     wrong: [
-      [{}, { backgroundColor: "red", fontSize: "9vmin" }, {}],
+      [{}, { backgroundColor: "red", fontSize: "1.5rem" }, {}],
       {
         duration: 200,
         iterations: 1,
       },
     ],
     proper: [
-      [{}, { backgroundColor: "greenyellow", fontSize: "9vmin" }, {}],
+      [{}, { backgroundColor: "greenyellow", fontSize: "1.5rem" }, {}],
       {
         duration: 300,
         iterations: 1,

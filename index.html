@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css?id=111" />
+    <link rel="stylesheet" href="style.css?id=" />
     <link rel="icon" type="image/png" href="./favicon.png" />
   </head>
   <body class="roboto-regular">
@@ -26,7 +26,11 @@
       <span class="splash-loading">loading...</span>
     </section>
 
-    <section id="$main" class="flex-col justify-center" hidden>
+    <section
+      id="$main"
+      class="overlay flex-col justify-center align-center"
+      hidden
+    >
       <div class="controls flex justify-center">
         <span id="$mainAvatar">🫥</span>
         <div id="$timer" class="timer">00:00</div>
@@ -35,7 +39,7 @@
 
       <div id="$cellGrid" class="cell-grid"></div>
 
-      <div class="flex justify-center">
+      <div class="flex gap-2 justify-center">
         <button id="$btnReset">reset</button>
         <button id="$btnSettings">⚙️</button>
       </div>
@@ -105,11 +109,11 @@
     </section>
 
     <section id="$overlaySettings" class="overlay" hidden>
-      <div id="ppSettings" class="popup settings">
+      <div id="ppSettings" class="popup settings gap-1">
         <p>⚙️ settings</p>
 
         <div class="flex-col">
-          <span>🔢 difficulty</span>
+          <span class="settings-block-title">🔢 difficulty</span>
 
           <template id="$tmplDifficultyOption">
             <label class="flex align-center">
@@ -138,25 +142,31 @@
           </div>
         </div>
 
-        <span>mode</span>
-        <label>
-          <input type="checkbox" name="mode" checked disabled />
-          <span>dim selected</span>
-        </label>
+        <div class="flex-col" hidden>
+          <span class="settings-block-title">mode</span>
+          <label>
+            <input type="checkbox" name="mode" checked disabled />
+            <span>dim selected</span>
+          </label>
+        </div>
 
-        <span>account</span>
+        <div class="flex-col">
+          <span class="settings-block-title">account</span>
 
-        <button id="$btnLinkAccount" class="btn-small" disabled>
-          <span class="label-enabled">link google</span>
-          <span class="label-disabled">☑️ google linked</span>
-        </button>
+          <button id="$btnLinkAccount" class="btn-small" disabled>
+            <span class="label-enabled">link google</span>
+            <span class="label-disabled">☑️ google linked</span>
+          </button>
+        </div>
 
-        <span>avatar</span>
+        <div class="flex-col">
+          <span class="settings-block-title">avatar</span>
 
-        <label class="flex align-center">
-          <span id="$settingsAvatar" class="settings-avatar">🫥</span>
-          <button class="btn-small" disabled>choose...</button>
-        </label>
+          <label class="flex align-center">
+            <span id="$settingsAvatar" class="settings-avatar">🫥</span>
+            <button class="btn-small" disabled>choose...</button>
+          </label>
+        </div>
       </div>
 
       <button id="$btnSettingsBack">back</button>
