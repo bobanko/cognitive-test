@@ -249,6 +249,38 @@ thead {
   z-index: 1;
 }
 
+/* rank 1,2,3 */
+.leaderboards tbody tr:nth-child(1) .lb-rank,
+.leaderboards tbody tr:nth-child(2) .lb-rank,
+.leaderboards tbody tr:nth-child(3) .lb-rank {
+  position: relative;
+  /* hide number */
+  color: transparent;
+}
+
+.leaderboards tbody tr:nth-child(1) .lb-rank:after,
+.leaderboards tbody tr:nth-child(2) .lb-rank:after,
+.leaderboards tbody tr:nth-child(3) .lb-rank:after {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  color: black;
+}
+
+.leaderboards tbody tr:nth-child(1) .lb-rank:after {
+  content: "🥇";
+}
+.leaderboards tbody tr:nth-child(2) .lb-rank:after {
+  content: "🥈";
+}
+.leaderboards tbody tr:nth-child(3) .lb-rank:after {
+  content: "🥉";
+}
+
+/* ------------- */
 .current-user {
   background-color: #ffd90080;
 }
