@@ -116,8 +116,6 @@ button:disabled {
   border: 0.1rem solid black;
 
   cursor: pointer;
-
-  content: attr(data-number);
 }
 .cell:after {
   content: attr(data-number);
@@ -167,11 +165,6 @@ button:disabled {
   padding: 1rem;
 }
 
-.popup {
-  display: flex;
-  flex-direction: column;
-}
-
 .popup,
 button {
   padding: 1rem;
@@ -197,6 +190,11 @@ button:not([disabled]) > .label-disabled {
 }
 
 div.popup {
+  max-height: 100vh;
+  max-width: 100vw;
+  box-sizing: border-box;
+  overflow: hidden;
+
   background-color: white;
 }
 
@@ -208,11 +206,6 @@ div.popup {
 
   border-bottom: 0.3rem solid #c9c9c9;
   padding-bottom: 0.3rem;
-}
-
-.hiScores-avatar {
-  font-size: 5rem;
-  padding-right: 1rem;
 }
 
 .leaderboards {
@@ -234,8 +227,40 @@ td.lb-date {
   width: 6rem;
 }
 
+/* -------------- */
+
+.hiScores-popup {
+  flex-shrink: 0;
+}
+
+.hiScores-avatar {
+  position: relative;
+  font-size: 5rem;
+
+  line-height: 5rem;
+  height: 5rem;
+  /* background: #ff00007d;
+  border-radius: 50%; */
+  /* animation: float 1s ease-in-out infinite alternate; */
+}
+/* 
+.hiScores-avatar:after {
+  content: "👑";
+  top: 0;
+  position: absolute;
+  left: 0;
+  font-size: 4rem;
+  right: 0;
+  text-align: center;
+  margin-top: -2rem;
+} */
+
+.score-text {
+  font-size: 1.5rem;
+}
+
 .score-value {
-  font-size: 2.5rem;
+  font-size: 2rem;
 }
 
 .table-container {
@@ -344,4 +369,74 @@ thead {
   to {
     opacity: 0.2;
   }
+}
+
+@keyframes float {
+  from {
+    transform: translateY(0rem);
+    text-shadow: 0 0rem 0rem black;
+  }
+  to {
+    transform: translateY(-0.5rem);
+    text-shadow: 0 0.5rem 0.5rem black;
+  }
+}
+
+/* div#\$timer,
+span#\$mainAvatar,
+span#\$clockIcon {
+  animation: float 0.5s ease-in-out infinite alternate;
+}
+
+.hiScores-avatar {
+  animation: float 1s ease-in-out infinite alternate;
+} */
+
+.avatar-list {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: 0;
+  grid-row-gap: 0;
+  font-size: 3rem;
+
+  overflow-y: scroll;
+}
+
+.avatar {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  line-height: 4rem;
+  appearance: none;
+  margin: 0;
+  text-align: center;
+}
+
+.avatar::after {
+  content: attr(data-value);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+
+  transition: all ease-in-out 300ms;
+}
+
+.avatar:checked::after {
+  /* animation: float 1s ease-in-out infinite alternate; */
+
+  transform: translateY(-0.2rem);
+  text-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.8);
+}
+
+.avatar:checked::before {
+  content: "";
+  box-shadow: inset 0 0 0 2rem gold;
+  border-radius: 1rem;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
 }

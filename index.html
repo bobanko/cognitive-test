@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style.css?id=" />
+    <link rel="stylesheet" href="style.css" />
     <link rel="icon" type="image/png" href="./favicon.png" />
   </head>
   <body class="roboto-regular">
@@ -46,18 +46,21 @@
     </section>
 
     <section id="$overlayHiScores" class="overlay" hidden>
-      <div id="ppScore" class="popup">
-        <div class="flex align-center justify-center">
-          <div id="$hiScoresAvatar" class="hiScores-avatar">🫥</div>
+      <div
+        id="ppScore"
+        class="hiScores-popup popup flex gap-2 align-center justify-center"
+      >
+        <div id="$hiScoresAvatar" class="hiScores-avatar">🫥</div>
 
-          <div class="flex-col align-center">
-            <div>your score:</div>
-            <div id="$score" class="score-value flex align-center">9999s</div>
-          </div>
+        <div class="flex-col align-center">
+          <div class="score-text">your score:</div>
+          <div id="$score" class="score-value">9999s</div>
+          <!-- <div class="score-text">prev score:</div>
+          <div id="$score2" class="score-value">333s</div> -->
         </div>
       </div>
 
-      <div class="popup leaderboards-popup">
+      <div class="popup leaderboards-popup flex-col">
         <p>🏆 leaderboards</p>
 
         <template id="$tmplLeaderboardsRow">
@@ -109,7 +112,7 @@
     </section>
 
     <section id="$overlaySettings" class="overlay" hidden>
-      <div id="ppSettings" class="popup settings gap-1">
+      <div id="ppSettings" class="popup settings flex-col gap-1">
         <p>⚙️ settings</p>
 
         <div class="flex-col">
@@ -164,12 +167,47 @@
 
           <label class="flex align-center">
             <span id="$settingsAvatar" class="settings-avatar">🫥</span>
-            <button class="btn-small" disabled>choose...</button>
+            <button id="$btnChooseAvatar" class="btn-small" disabled>
+              choose...
+            </button>
           </label>
         </div>
       </div>
 
       <button id="$btnSettingsBack">back</button>
+    </section>
+
+    <section id="$overlayAvatar" class="overlay" hidden>
+      <div class="popup flex-col gap-1">
+        <p>🫥 choose avatar</p>
+        <template id="$tmplAvatar">
+          <input class="avatar" type="radio" name="avatar" data-value="🫥" />
+        </template>
+        <div id="$avatarList" class="avatar-list">
+          <input
+            class="avatar"
+            type="radio"
+            name="avatar"
+            value="🫥"
+            data-value="🫥"
+          />
+          <input
+            class="avatar"
+            type="radio"
+            name="avatar"
+            value="🫥"
+            data-value="🫥"
+          />
+          <input
+            class="avatar"
+            type="radio"
+            name="avatar"
+            value="🫥"
+            data-value="🫥"
+          />
+        </div>
+        <button id="$btnCloseAvatarList" class="btn-small">close</button>
+      </div>
     </section>
 
     <script type="module" src="./firebase.js"></script>

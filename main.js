@@ -1,5 +1,5 @@
 import { Timer } from "./timer.js";
-import { getAvatarForUid } from "./avatars.js";
+import { avatars, getAvatarForUid } from "./avatars.js";
 import {
   signAnonUser,
   linkAnonUser,
@@ -91,6 +91,45 @@ function initDifficultyOptions() {
   });
 }
 
+// avatar
+
+$btnChooseAvatar.addEventListener("click", () => {
+  $overlaySettings.classList.add("blurred");
+  $overlayAvatar.hidden = false;
+});
+
+$btnCloseAvatarList.addEventListener("click", () => {
+  $overlaySettings.classList.remove("blurred");
+  $overlayAvatar.hidden = true;
+  const selectedAvatar = $overlayAvatar.querySelector(
+    "input[name=avatar]:checked"
+  ).value;
+
+  // todo(vmyshko): apply new avatar/save
+  console.log("new av", selectedAvatar);
+  //debug
+  $mainAvatar.textContent = selectedAvatar;
+  $hiScoresAvatar.textContent = selectedAvatar;
+  $settingsAvatar.textContent = selectedAvatar;
+});
+
+function initAvatarList() {
+  $avatarList.replaceChildren();
+
+  avatars.forEach((avatar) => {
+    const avatarFragment = $tmplAvatar.content.cloneNode(true);
+
+    const $avatar = avatarFragment.querySelector(".avatar");
+
+    $avatar.value = avatar;
+    $avatar.dataset.value = avatar;
+
+    $avatarList.appendChild(avatarFragment);
+  });
+}
+
+initAvatarList();
+
 initDifficultyOptions();
 
 onAuthStateChanged((user) => {
@@ -114,6 +153,13 @@ onAuthStateChanged((user) => {
     $mainAvatar.textContent = av;
     $hiScoresAvatar.textContent = av;
     $settingsAvatar.textContent = av;
+
+    const $selectedAvatar = $overlayAvatar.querySelector(
+      `input[name=avatar][data-value=${av}`
+    );
+    if ($selectedAvatar) {
+      $selectedAvatar.checked = true;
+    }
   }
 });
 
