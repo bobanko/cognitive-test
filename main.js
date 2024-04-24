@@ -63,6 +63,17 @@ if (cheat === "#cheat") {
   $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
 }
 
+if (location.hash == "#dr04") {
+  difficultyLevels.splice(0, difficultyLevels.length, {
+    id: "1x1",
+    text: "🌭",
+    cellCount: 1 * 1,
+    tableName: "hiScores-1x1",
+  });
+
+  avatars.splice(0, avatars.length, "🌭");
+}
+
 $btnLinkAccount.addEventListener("click", () => {
   linkAnonUser();
 });
@@ -71,7 +82,7 @@ $btnLinkAccount.addEventListener("click", () => {
 function initDifficultyOptions() {
   $difficultyOptions.replaceChildren();
 
-  difficultyLevels.forEach((difLevel) => {
+  difficultyLevels.forEach((difLevel, index) => {
     const optionFragment = $tmplDifficultyOption.content.cloneNode(true);
 
     //caption
@@ -83,7 +94,7 @@ function initDifficultyOptions() {
     $optionValue.value = difLevel.id;
 
     // todo(vmyshko): check current level
-    if (difLevel.id === "2x2") {
+    if (index === 0) {
       $optionValue.checked = true;
     }
 
@@ -98,6 +109,12 @@ $btnChooseAvatar.addEventListener("click", () => {
   $overlayAvatar.hidden = false;
 });
 
+function setAvatar(avatar) {
+  $mainAvatar.textContent = avatar;
+  $hiScoresAvatar.textContent = avatar;
+  $settingsAvatar.textContent = avatar;
+}
+
 $btnCloseAvatarList.addEventListener("click", () => {
   $overlaySettings.classList.remove("blur-2");
   $overlayAvatar.hidden = true;
@@ -107,10 +124,8 @@ $btnCloseAvatarList.addEventListener("click", () => {
 
   // todo(vmyshko): apply new avatar/save
   console.log("new av", selectedAvatar);
-  //debug
-  $mainAvatar.textContent = selectedAvatar;
-  $hiScoresAvatar.textContent = selectedAvatar;
-  $settingsAvatar.textContent = selectedAvatar;
+
+  setAvatar(selectedAvatar);
 });
 
 function initAvatarList() {
@@ -150,9 +165,7 @@ onAuthStateChanged((user) => {
     $btnLinkAccount.disabled = !user.isAnonymous;
 
     const av = getAvatarForUid(user.uid);
-    $mainAvatar.textContent = av;
-    $hiScoresAvatar.textContent = av;
-    $settingsAvatar.textContent = av;
+    setAvatar(av);
 
     const $selectedAvatar = $overlayAvatar.querySelector(
       `input[name=avatar][data-value=${av}`
