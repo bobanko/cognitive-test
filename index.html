@@ -40,6 +40,7 @@
       <div id="$cellGrid" class="cell-grid"></div>
 
       <div class="flex gap-2 justify-center">
+        <button id="$btnHiScores">🏆</button>
         <button id="$btnReset">reset</button>
         <button id="$btnSettings">⚙️</button>
       </div>
@@ -115,7 +116,7 @@
       <div id="ppSettings" class="popup settings flex-col gap-1">
         <p>⚙️ settings</p>
 
-        <div class="flex-col">
+        <div class="flex-col gap-1">
           <span class="settings-block-title">🔢 difficulty</span>
 
           <template id="$tmplDifficultyOption">
@@ -145,7 +146,7 @@
           </div>
         </div>
 
-        <div class="flex-col" hidden>
+        <div class="flex-col gap-1" hidden>
           <span class="settings-block-title">mode</span>
           <label>
             <input type="checkbox" name="mode" checked disabled />
@@ -153,7 +154,7 @@
           </label>
         </div>
 
-        <div class="flex-col">
+        <div class="flex-col gap-1">
           <span class="settings-block-title">account</span>
 
           <button id="$btnLinkAccount" class="btn-small" disabled>
@@ -162,7 +163,7 @@
           </button>
         </div>
 
-        <div class="flex-col">
+        <div class="flex-col gap-1">
           <span class="settings-block-title">avatar</span>
 
           <label class="flex align-center">

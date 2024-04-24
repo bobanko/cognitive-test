@@ -19,7 +19,7 @@ $btnSettingsBack.addEventListener("click", closeSettings);
 // todo(vmyshko): use history api?
 $btnRestart.addEventListener("click", () => {
   $overlayHiScores.hidden = true;
-  $main.classList.remove("blurred");
+  $main.classList.remove("blur-2");
 
   initGrid();
 });
@@ -39,13 +39,13 @@ function getCurrentDifLevel() {
 
 function openSettings() {
   $overlaySettings.hidden = false;
-  $main.classList.add("blurred");
+  $main.classList.add("blur-2");
   timer.stop();
 }
 
 function closeSettings() {
   $overlaySettings.hidden = true;
-  $main.classList.remove("blurred");
+  $main.classList.remove("blur-2");
 
   // todo(vmyshko): update with new settings
 
@@ -94,12 +94,12 @@ function initDifficultyOptions() {
 // avatar
 
 $btnChooseAvatar.addEventListener("click", () => {
-  $overlaySettings.classList.add("blurred");
+  $overlaySettings.classList.add("blur-2");
   $overlayAvatar.hidden = false;
 });
 
 $btnCloseAvatarList.addEventListener("click", () => {
-  $overlaySettings.classList.remove("blurred");
+  $overlaySettings.classList.remove("blur-2");
   $overlayAvatar.hidden = true;
   const selectedAvatar = $overlayAvatar.querySelector(
     "input[name=avatar]:checked"
@@ -224,36 +224,35 @@ function initGrid() {
   });
 
   function formatScore(score) {
-    return (score / 1000).toString().padEnd(5, 0) + "s";
+    if (isNaN(score)) return "n/a";
+
+    // todo(vmyshko): make progressive
+    if (score >= 100) return (score / 1000).toFixed(2) + "s";
+    //less than 100
+    return (score / 1000).toFixed(3) + "s";
   }
 
-  async function processWin() {
+  $btnHiScores.addEventListener("click", () => {
     timer.stop();
+    showHiScores({ currentScore: NaN });
+  });
 
-    // todo(vmyshko): show win and leaders
-
-    const currentScore = timer.getDiff();
+  async function showHiScores({ currentScore }) {
+    $overlayHiScores.hidden = false;
+    $main.classList.add("blur-2");
 
     $score.textContent = "⏱️" + formatScore(currentScore);
 
-    const user = getCurrentUser();
-
-    await savePlayerHiScore({
-      uid: user.uid,
-      score: currentScore,
-      date: new Date(),
-      hiScoresTableName: tableName,
-    });
-
-    $overlayHiScores.hidden = false;
-    $main.classList.add("blurred");
+    $leaderboardsTableBody.classList.add("blur-1");
 
     const leaders = await loadHiScores({
       hiScoresTableName: tableName,
     });
 
-    //clear fake data
+    //clear fake/prev data
     $leaderboardsTableBody.replaceChildren();
+
+    const user = getCurrentUser();
 
     let rank = 0;
     let currentRank = 0;
@@ -280,6 +279,8 @@ function initGrid() {
       });
     });
 
+    $leaderboardsTableBody.classList.remove("blur-1");
+
     const rowHeight =
       $leaderboardsContainer.querySelector("tbody>tr").clientHeight;
 
@@ -288,6 +289,23 @@ function initGrid() {
       left: 0,
       behavior: "smooth",
     });
+  }
+
+  async function processWin() {
+    timer.stop();
+
+    const currentScore = timer.getDiff();
+
+    //save hi-score
+    const user = getCurrentUser();
+    await savePlayerHiScore({
+      uid: user.uid,
+      score: currentScore,
+      date: new Date(),
+      hiScoresTableName: tableName,
+    });
+
+    showHiScores({ currentScore });
   }
 
   const animations = {
