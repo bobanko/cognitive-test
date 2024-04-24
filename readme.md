@@ -2,6 +2,9 @@
 
 https://bobanko.github.io/cognitive-test/
 
+dr04-mode for speedrunners:
+https://bobanko.github.io/cognitive-test/#dr04
+
 ---
 
 # todo:
