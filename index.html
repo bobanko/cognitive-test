@@ -49,7 +49,7 @@
     <section id="$overlayHiScores" class="overlay" hidden>
       <div
         id="ppScore"
-        class="hiScores-popup popup flex gap-2 align-center justify-center"
+        class="hi-scores-popup popup flex gap-2 align-center justify-center"
       >
         <div id="$hiScoresAvatar" class="hiScores-avatar">🫥</div>
 
@@ -61,10 +61,10 @@
         </div>
       </div>
 
-      <div class="popup leaderboards-popup flex-col">
+      <div class="popup hiScores-popup flex-col">
         <p>🏆 leaderboards</p>
 
-        <template id="$tmplLeaderboardsRow">
+        <template id="$tmplHiScoresRow">
           <tr>
             <td class="lb-rank">999</td>
             <td class="lb-player">🫥</td>
@@ -73,8 +73,8 @@
           </tr>
         </template>
 
-        <div id="$leaderboardsContainer" class="table-container">
-          <table class="leaderboards">
+        <div id="$hiScoresContainer" class="table-container">
+          <table class="hi-scores">
             <thead>
               <tr>
                 <td>#</td>
@@ -83,7 +83,7 @@
                 <td>date</td>
               </tr>
             </thead>
-            <tbody id="$leaderboardsTableBody">
+            <tbody id="$hiScoresTableBody">
               <tr>
                 <td class="lb-rank">999</td>
                 <td class="lb-player">🫥</td>

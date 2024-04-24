@@ -175,7 +175,7 @@ function initGrid() {
 
   let currentNum = 1;
 
-  function getLeaderboardsRow({
+  function getHiScoresRow({
     uid,
     rank,
     score,
@@ -183,7 +183,7 @@ function initGrid() {
     isCurrentScore,
     isCurrentUser,
   }) {
-    const rowFragment = $tmplLeaderboardsRow.content.cloneNode(true);
+    const rowFragment = $tmplHiScoresRow.content.cloneNode(true);
 
     //rank
     const $rank = rowFragment.querySelector(".lb-rank");
@@ -243,7 +243,7 @@ function initGrid() {
 
     $score.textContent = "⏱️" + formatScore(currentScore);
 
-    $leaderboardsTableBody.classList.add("blur-1");
+    $hiScoresTableBody.classList.add("blur-1");
 
     const leaders = await loadHiScores({
       hiScoresTableName: tableName,
@@ -269,7 +269,7 @@ function initGrid() {
         currentRank = rank;
       }
 
-      const $leaderRow = getLeaderboardsRow({
+      const $leaderRow = getHiScoresRow({
         ...userData,
         rank,
         isCurrentScore,
@@ -279,14 +279,13 @@ function initGrid() {
       newLeaders.push($leaderRow);
     });
 
-    $leaderboardsTableBody.replaceChildren(...newLeaders);
+    $hiScoresTableBody.replaceChildren(...newLeaders);
 
-    $leaderboardsTableBody.classList.remove("blur-1");
+    $hiScoresTableBody.classList.remove("blur-1");
 
-    const rowHeight =
-      $leaderboardsContainer.querySelector("tbody>tr").clientHeight;
+    const rowHeight = $hiScoresContainer.querySelector("tbody>tr").clientHeight;
 
-    $leaderboardsContainer.scrollTo({
+    $hiScoresContainer.scrollTo({
       top: rowHeight * (currentRank - 2),
       left: 0,
       behavior: "smooth",

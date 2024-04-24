@@ -16,9 +16,8 @@ https://bobanko.github.io/cognitive-test/
 [ ] add 5m timeout to loose  
 [ ] make different screens as diff pages via location history
 
-## leaderboard:
+## hi-scores:
 
-[ ] add crown or 1/2/3 medals for top winners  
 [ ] add notif for winner if someone beaten them  
 [ ] add message from new winner (to looser)?  
 [ ] hi score tabs for other difficulties  
@@ -26,6 +25,7 @@ https://bobanko.github.io/cognitive-test/
 [ ] show leaders by country/global?  
 [ ] show last/best scores  
 [ ] scroll to current result in table when clicking on av  
+[ ] add crown for top-1 winner?
 [ ] show scores like:
 
     score: 100
@@ -48,6 +48,7 @@ https://bobanko.github.io/cognitive-test/
 
 # done
 
+[x] add 1/2/3 medals for top winners  
 [x] fix landscape mode / for desktops  
 [x] keep only best result per player  
 [x] choose difficulty level 3x3, 4x4, 5x5 etc.  
