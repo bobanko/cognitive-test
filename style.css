@@ -221,6 +221,7 @@ div.popup {
 .leaderboards {
   font-size: 2rem;
   border-collapse: collapse;
+  width: 100%;
 }
 
 .leaderboards-popup {

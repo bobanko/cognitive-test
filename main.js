@@ -175,7 +175,7 @@ function initGrid() {
 
   let currentNum = 1;
 
-  function addLeaderboardsRow({
+  function getLeaderboardsRow({
     uid,
     rank,
     score,
@@ -210,7 +210,7 @@ function initGrid() {
       $tr.classList.add("current-score");
     }
 
-    $leaderboardsTableBody.appendChild(rowFragment);
+    return rowFragment;
   }
 
   timer.onUpdate((diff) => {
@@ -249,13 +249,11 @@ function initGrid() {
       hiScoresTableName: tableName,
     });
 
-    //clear fake/prev data
-    $leaderboardsTableBody.replaceChildren();
-
     const user = getCurrentUser();
 
     let rank = 0;
     let currentRank = 0;
+    const newLeaders = [];
     leaders.forEach((doc) => {
       const userData = {
         uid: doc.id,
@@ -271,13 +269,17 @@ function initGrid() {
         currentRank = rank;
       }
 
-      addLeaderboardsRow({
+      const $leaderRow = getLeaderboardsRow({
         ...userData,
         rank,
         isCurrentScore,
         isCurrentUser,
       });
+
+      newLeaders.push($leaderRow);
     });
+
+    $leaderboardsTableBody.replaceChildren(...newLeaders);
 
     $leaderboardsTableBody.classList.remove("blur-1");
 
