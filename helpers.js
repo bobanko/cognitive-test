@@ -18,7 +18,7 @@ export function getHashNum(str = "", max = 0) {
   return hash;
 }
 
-function wait(ms) {
+export function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
