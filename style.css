@@ -152,6 +152,11 @@ button:disabled {
   opacity: 0.5;
 }
 
+.blur-1 *,
+.blur-2 * {
+  pointer-events: none;
+}
+
 .overlay {
   position: fixed;
 

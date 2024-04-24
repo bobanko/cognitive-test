@@ -247,12 +247,12 @@ function initGrid() {
 
   $btnHiScores.addEventListener("click", () => {
     timer.stop();
+    $main.classList.add("blur-2");
     showHiScores({ currentScore: NaN });
   });
 
   async function showHiScores({ currentScore }) {
     $overlayHiScores.hidden = false;
-    $main.classList.add("blur-2");
 
     $score.textContent = "⏱️" + formatScore(currentScore);
 
@@ -306,6 +306,8 @@ function initGrid() {
   }
 
   async function processWin() {
+    $main.classList.add("blur-2");
+
     timer.stop();
 
     const currentScore = timer.getDiff();
