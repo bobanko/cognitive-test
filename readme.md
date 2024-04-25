@@ -40,10 +40,8 @@ https://bobanko.github.io/cognitive-test/#dr04
 ## auth:
 
 [ ] input user name / age  
-[ ] select av  
-[~] make auth with email/pw + google etc.
-
-[ ]
+[x] make other auth providers?  
+[ ] merge two or more anon accounts with registered -- save best score from all.
 
 ## to think about it
 
@@ -51,6 +49,8 @@ https://bobanko.github.io/cognitive-test/#dr04
 
 # done
 
+[x] make auth with with google  
+[x] registered player can select avatar  
 [x] add 1/2/3 medals for top winners  
 [x] fix landscape mode / for desktops  
 [x] keep only best result per player  
