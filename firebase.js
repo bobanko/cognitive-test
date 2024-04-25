@@ -26,6 +26,7 @@ import {
 import { firebaseConfig } from "./config.js";
 import { getAvatarForUid } from "./avatars.js";
 
+const playerSettingsTableName = "players";
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -44,6 +45,37 @@ export async function loadHiScores({ hiScoresTableName }) {
   return querySnapshot;
 }
 
+export async function savePlayerSettings(uid, { avatar, difficulty }) {
+  const playerRef = doc(db, playerSettingsTableName, uid);
+
+  return setDoc(playerRef, {
+    avatar,
+    // difficulty,
+  });
+}
+
+export async function loadAllPlayerSettings() {
+  const settingsRef = collection(db, playerSettingsTableName);
+
+  const querySnapshot = getDocs(query(settingsRef));
+
+  return querySnapshot;
+}
+
+export async function loadPlayerSettings(uid) {
+  const playerRef = doc(db, playerSettingsTableName, uid);
+  const playerSnap = await getDoc(playerRef);
+
+  if (playerSnap.exists()) return await playerSnap.data();
+
+  const avatar = getAvatarForUid(uid);
+
+  //default
+  return {
+    avatar,
+  };
+}
+
 export async function savePlayerHiScore({
   uid,
   score,
@@ -53,10 +85,8 @@ export async function savePlayerHiScore({
   const hiScoreRef = doc(db, hiScoresTableName, uid);
   const hiScoreSnap = await getDoc(hiScoreRef);
 
-  const av = getAvatarForUid(uid);
-
   if (!hiScoreSnap.exists()) {
-    console.log(`${av}[CREATE] score for this player not exists -- create`);
+    console.log(`[CREATE] score for this player not exists -- create`);
     return setDoc(hiScoreRef, {
       score,
       date,
@@ -68,7 +98,7 @@ export async function savePlayerHiScore({
 
   if (hiScoreData.score <= score) {
     console.log(
-      `${av}[SKIP] old score: ${hiScoreData.score} is better (<) than ${score}`
+      `[SKIP] old score: ${hiScoreData.score} is better (<) than ${score}`
     );
     return;
   }
@@ -76,7 +106,7 @@ export async function savePlayerHiScore({
   //do update
 
   console.log(
-    `${av}[UPDATE] old score: ${hiScoreData.score} is worse (>) than ${score}`
+    `[UPDATE] old score: ${hiScoreData.score} is worse (>) than ${score}`
   );
   return setDoc(hiScoreRef, {
     score,

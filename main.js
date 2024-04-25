@@ -7,6 +7,9 @@ import {
   getCurrentUser,
   onAuthStateChanged,
   savePlayerHiScore,
+  savePlayerSettings,
+  loadPlayerSettings,
+  loadAllPlayerSettings,
 } from "./firebase.js";
 
 import { difficultyLevels } from "./config.js";
@@ -62,7 +65,7 @@ if (cheat === "#cheat") {
   // todo(vmyshko): get time after click, dynamically
   $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
 }
-
+//cheat modes
 if (location.hash == "#dr04") {
   difficultyLevels.splice(0, difficultyLevels.length, {
     id: "1x1",
@@ -116,6 +119,7 @@ function setAvatar(avatar) {
 }
 
 $btnCloseAvatarList.addEventListener("click", () => {
+  // todo(vmyshko): extract to fn
   $overlaySettings.classList.remove("blur-2");
   $overlayAvatar.hidden = true;
   const selectedAvatar = $overlayAvatar.querySelector(
@@ -126,6 +130,12 @@ $btnCloseAvatarList.addEventListener("click", () => {
   console.log("new av", selectedAvatar);
 
   setAvatar(selectedAvatar);
+
+  const user = getCurrentUser();
+
+  savePlayerSettings(user.uid, {
+    avatar: selectedAvatar,
+  });
 });
 
 function initAvatarList() {
@@ -147,7 +157,8 @@ initAvatarList();
 
 initDifficultyOptions();
 
-onAuthStateChanged((user) => {
+onAuthStateChanged(async (user) => {
+  //extract to fn
   console.log("user changed", user);
 
   if (!user) {
@@ -163,12 +174,17 @@ onAuthStateChanged((user) => {
     $splash.hidden = true;
 
     $btnLinkAccount.disabled = !user.isAnonymous;
+    $btnChooseAvatar.disabled = user.isAnonymous;
 
-    const av = getAvatarForUid(user.uid);
-    setAvatar(av);
+    const settings = await loadPlayerSettings(user.uid);
 
+    const { avatar } = settings;
+
+    setAvatar(avatar);
+
+    //for settings
     const $selectedAvatar = $overlayAvatar.querySelector(
-      `input[name=avatar][data-value=${av}`
+      `input[name=avatar][data-value=${avatar}`
     );
     if ($selectedAvatar) {
       $selectedAvatar.checked = true;
@@ -176,7 +192,137 @@ onAuthStateChanged((user) => {
   }
 });
 
+$btnHiScores.addEventListener("click", () => {
+  timer.stop();
+  console.log("show hiscores");
+  $main.classList.add("blur-2");
+  showHiScores({ currentScore: NaN });
+});
+
+async function showHiScores({ currentScore }) {
+  $overlayHiScores.hidden = false;
+
+  $score.textContent = "⏱️" + formatScore(currentScore);
+
+  $hiScoresTableBody.classList.add("blur-1");
+
+  const allPlayers = await loadAllPlayerSettings();
+
+  const dbAvatars = new Map();
+  allPlayers.forEach((doc) => {
+    const playerData = {
+      uid: doc.id,
+      ...doc.data(),
+    };
+
+    dbAvatars.set(playerData.uid, playerData.avatar);
+  });
+
+  const { tableName } = getCurrentDifLevel();
+
+  const leaders = await loadHiScores({
+    hiScoresTableName: tableName,
+  });
+
+  const user = getCurrentUser();
+
+  $hiScoresTableBody.replaceChildren();
+
+  let rank = 0;
+  let currentRank = 0;
+  const newLeaders = [];
+  leaders.forEach((doc) => {
+    const userData = {
+      uid: doc.id,
+      ...doc.data(),
+    };
+    rank++;
+
+    const isCurrentUser = userData.uid === user.uid;
+
+    const isCurrentScore = isCurrentUser && userData.score === currentScore;
+
+    if (isCurrentScore || isCurrentUser) {
+      currentRank = rank;
+    }
+
+    const $leaderRow = getHiScoresRow({
+      ...userData,
+      rank,
+      isCurrentScore,
+      isCurrentUser,
+      dbAvatars,
+    });
+
+    newLeaders.push($leaderRow);
+  });
+
+  $hiScoresTableBody.replaceChildren(...newLeaders);
+
+  $hiScoresTableBody.classList.remove("blur-1");
+
+  const rowHeight = $hiScoresContainer.querySelector("tbody>tr").clientHeight;
+
+  $hiScoresContainer.scrollTo({
+    top: rowHeight * (currentRank - 2),
+    left: 0,
+    behavior: "smooth",
+  });
+}
+
+function formatScore(score) {
+  if (isNaN(score)) return "n/a";
+
+  // todo(vmyshko): make progressive
+  if (score >= 100) return (score / 1000).toFixed(2) + "s";
+  //less than 100
+  return (score / 1000).toFixed(3) + "s";
+}
+
+function getHiScoresRow({
+  uid,
+  rank,
+  score,
+  date,
+  isCurrentScore,
+  isCurrentUser,
+  dbAvatars,
+}) {
+  const rowFragment = $tmplHiScoresRow.content.cloneNode(true);
+
+  //rank
+  const $rank = rowFragment.querySelector(".lb-rank");
+  $rank.textContent = rank;
+
+  //player
+  const $player = rowFragment.querySelector(".lb-player");
+
+  $player.textContent = dbAvatars.has(uid)
+    ? dbAvatars.get(uid)
+    : getAvatarForUid(uid);
+
+  //score
+  const $score = rowFragment.querySelector(".lb-score");
+  $score.textContent = formatScore(score);
+  //date
+  const $date = rowFragment.querySelector(".lb-date");
+  $date.textContent = date.toDate().toLocaleString();
+
+  const $tr = rowFragment.querySelector("tr");
+
+  if (isCurrentUser) {
+    $tr.classList.add("current-user");
+  }
+
+  if (isCurrentScore) {
+    $tr.classList.add("current-score");
+  }
+
+  return rowFragment;
+}
+
 function initGrid() {
+  // todo(vmyshko): REFAC remove all nested fns if possible
   const { cellCount, tableName } = getCurrentDifLevel();
   //remove all
   timer.stop();
@@ -188,44 +334,6 @@ function initGrid() {
 
   let currentNum = 1;
 
-  function getHiScoresRow({
-    uid,
-    rank,
-    score,
-    date,
-    isCurrentScore,
-    isCurrentUser,
-  }) {
-    const rowFragment = $tmplHiScoresRow.content.cloneNode(true);
-
-    //rank
-    const $rank = rowFragment.querySelector(".lb-rank");
-    $rank.textContent = rank;
-
-    //player
-    const $player = rowFragment.querySelector(".lb-player");
-    $player.textContent = getAvatarForUid(uid);
-
-    //score
-    const $score = rowFragment.querySelector(".lb-score");
-    $score.textContent = formatScore(score);
-    //date
-    const $date = rowFragment.querySelector(".lb-date");
-    $date.textContent = date.toDate().toLocaleString();
-
-    const $tr = rowFragment.querySelector("tr");
-
-    if (isCurrentUser) {
-      $tr.classList.add("current-user");
-    }
-
-    if (isCurrentScore) {
-      $tr.classList.add("current-score");
-    }
-
-    return rowFragment;
-  }
-
   timer.onUpdate((diff) => {
     const timeStr = new Date(diff).toLocaleTimeString("en-US", {
       minute: "numeric",
@@ -235,75 +343,6 @@ function initGrid() {
 
     $timer.textContent = timeStr;
   });
-
-  function formatScore(score) {
-    if (isNaN(score)) return "n/a";
-
-    // todo(vmyshko): make progressive
-    if (score >= 100) return (score / 1000).toFixed(2) + "s";
-    //less than 100
-    return (score / 1000).toFixed(3) + "s";
-  }
-
-  $btnHiScores.addEventListener("click", () => {
-    timer.stop();
-    $main.classList.add("blur-2");
-    showHiScores({ currentScore: NaN });
-  });
-
-  async function showHiScores({ currentScore }) {
-    $overlayHiScores.hidden = false;
-
-    $score.textContent = "⏱️" + formatScore(currentScore);
-
-    $hiScoresTableBody.classList.add("blur-1");
-
-    const leaders = await loadHiScores({
-      hiScoresTableName: tableName,
-    });
-
-    const user = getCurrentUser();
-
-    let rank = 0;
-    let currentRank = 0;
-    const newLeaders = [];
-    leaders.forEach((doc) => {
-      const userData = {
-        uid: doc.id,
-        ...doc.data(),
-      };
-      rank++;
-
-      const isCurrentUser = userData.uid === user.uid;
-
-      const isCurrentScore = isCurrentUser && userData.score === currentScore;
-
-      if (isCurrentScore || isCurrentUser) {
-        currentRank = rank;
-      }
-
-      const $leaderRow = getHiScoresRow({
-        ...userData,
-        rank,
-        isCurrentScore,
-        isCurrentUser,
-      });
-
-      newLeaders.push($leaderRow);
-    });
-
-    $hiScoresTableBody.replaceChildren(...newLeaders);
-
-    $hiScoresTableBody.classList.remove("blur-1");
-
-    const rowHeight = $hiScoresContainer.querySelector("tbody>tr").clientHeight;
-
-    $hiScoresContainer.scrollTo({
-      top: rowHeight * (currentRank - 2),
-      left: 0,
-      behavior: "smooth",
-    });
-  }
 
   async function processWin() {
     $main.classList.add("blur-2");
@@ -373,6 +412,7 @@ function initGrid() {
   //create cells
   const preCells = [];
   for (let cellNumber = 1; cellNumber <= cellCount; cellNumber++) {
+    // todo(vmyshko): get from tmpl
     const $cell = document.createElement("div");
     $cell.classList.add("cell");
 
