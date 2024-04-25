@@ -176,6 +176,10 @@ onAuthStateChanged(async (user) => {
     $btnLinkAccount.disabled = !user.isAnonymous;
     $btnChooseAvatar.disabled = user.isAnonymous;
 
+    if (location.hash === "#free-av") {
+      $btnChooseAvatar.disabled = false;
+    }
+
     const settings = await loadPlayerSettings(user.uid);
 
     const { avatar } = settings;
