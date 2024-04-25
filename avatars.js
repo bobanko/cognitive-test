@@ -84,6 +84,6 @@ export const avatars = [
 ];
 
 export function getAvatarForUid(uid) {
-  const avatarId = getHashNum(uid, avatars.length);
-  return avatars[avatarId];
+  const avatarId = getHashNum(uid, anonAvatars.length);
+  return anonAvatars[avatarId];
 }
