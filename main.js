@@ -55,6 +55,12 @@ function closeSettings() {
   initGrid();
 }
 
+function setAvatar(avatar) {
+  $mainAvatar.textContent = avatar;
+  $hiScoresAvatar.textContent = avatar;
+  $settingsAvatar.textContent = avatar;
+}
+
 const timer = new Timer();
 
 // todo(vmyshko): cheat for quick auto solve
@@ -66,16 +72,6 @@ if (cheat === "#cheat") {
   $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
 }
 //cheat modes
-if (location.hash == "#dr04") {
-  difficultyLevels.splice(0, difficultyLevels.length, {
-    id: "1x1",
-    text: "🌭",
-    cellCount: 1 * 1,
-    tableName: "hiScores-1x1",
-  });
-
-  avatars.splice(0, avatars.length, "🌭");
-}
 
 $btnLinkAccount.addEventListener("click", () => {
   linkAnonUser();
@@ -111,12 +107,6 @@ $btnChooseAvatar.addEventListener("click", () => {
   $overlaySettings.classList.add("blur-2");
   $overlayAvatar.hidden = false;
 });
-
-function setAvatar(avatar) {
-  $mainAvatar.textContent = avatar;
-  $hiScoresAvatar.textContent = avatar;
-  $settingsAvatar.textContent = avatar;
-}
 
 $btnCloseAvatarList.addEventListener("click", () => {
   // todo(vmyshko): extract to fn
