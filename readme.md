@@ -5,6 +5,9 @@ https://bobanko.github.io/cognitive-test/
 dr04-mode for speedrunners:
 https://bobanko.github.io/cognitive-test/#dr04
 
+free avatars for anon users:
+https://bobanko.github.io/cognitive-test/#free-av
+
 ---
 
 # todo:
