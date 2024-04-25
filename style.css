@@ -130,16 +130,11 @@ button:disabled {
   color: white;
 }
 
-.controls {
+.timer-block {
   font-size: 4rem;
   line-height: 4rem;
-}
 
-.controls > button {
-  font-size: inherit;
-  background: none;
-  border: none;
-  cursor: pointer;
+  animation: floating 500ms ease-in-out infinite alternate;
 }
 
 .blur-1 {
@@ -240,9 +235,6 @@ div.popup {
 
   line-height: 5rem;
   height: 5rem;
-  /* background: #ff00007d;
-  border-radius: 50%; */
-  /* animation: float 1s ease-in-out infinite alternate; */
 }
 
 td {
@@ -385,26 +377,20 @@ thead {
   }
 }
 
-@keyframes float {
+:root {
+  --floating-shift: 0.2rem;
+}
+
+@keyframes floating {
   from {
     transform: translateY(0rem);
     text-shadow: 0 0rem 0rem black;
   }
   to {
-    transform: translateY(-0.5rem);
-    text-shadow: 0 0.5rem 0.5rem black;
+    transform: translateY(calc(-1 * var(--floating-shift)));
+    text-shadow: 0 var(--floating-shift) var(--floating-shift) black;
   }
 }
-
-/* div#\$timer,
-span#\$mainAvatar,
-span#\$clockIcon {
-  animation: float 0.5s ease-in-out infinite alternate;
-}
-
-.hiScores-avatar {
-  animation: float 1s ease-in-out infinite alternate;
-} */
 
 .avatar-list {
   display: grid;
@@ -438,8 +424,6 @@ span#\$clockIcon {
 }
 
 .avatar:checked::after {
-  /* animation: float 1s ease-in-out infinite alternate; */
-
   transform: translateY(-0.2rem);
   text-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.8);
 }

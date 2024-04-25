@@ -63,7 +63,8 @@ function setAvatar(avatar) {
 
 const timer = new Timer();
 
-// todo(vmyshko): cheat for quick auto solve
+//cheat modes
+// cheat for quick auto solve
 const [cheat, secondsToSolve] = location.hash.split("/");
 if (cheat === "#cheat") {
   console.log("🤥 Cheater detected");
@@ -71,7 +72,6 @@ if (cheat === "#cheat") {
   // todo(vmyshko): get time after click, dynamically
   $clockIcon.addEventListener("click", () => solve(secondsToSolve * 1e3));
 }
-//cheat modes
 
 $btnLinkAccount.addEventListener("click", () => {
   linkAnonUser();
@@ -164,11 +164,6 @@ onAuthStateChanged(async (user) => {
     $splash.hidden = true;
 
     $btnLinkAccount.disabled = !user.isAnonymous;
-    $btnChooseAvatar.disabled = user.isAnonymous;
-
-    if (location.hash === "#free-av") {
-      $btnChooseAvatar.disabled = false;
-    }
 
     const settings = await loadPlayerSettings(user.uid);
 
